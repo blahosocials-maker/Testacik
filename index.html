@@ -1,4 +1,33 @@
 <!DOCTYPE html>
+<html lang="sk">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>PizzaThis — Objednávka</title>
+  <style>
+    *{box-sizing:border-box;margin:0;padding:0;font-family:Arial,sans-serif}
+    body{background:#0f0b09;color:white;min-height:100vh}
+    .hero{min-height:360px;background:linear-gradient(90deg,rgba(10,6,4,.94),rgba(120,42,10,.68)),url('https://images.unsplash.com/photo-1513104890138-7c749659a591?auto=format&fit=crop&w=1600&q=80') center/cover;display:flex;align-items:center;padding:55px 8%}
+    .hero h1{font-size:64px;margin-bottom:12px;color:#fff}.hero p{font-size:20px;max-width:650px;color:#eee;line-height:1.5}.tag{display:inline-block;background:#ff7a1a22;border:1px solid #ff7a1a;color:#ffb36d;padding:8px 13px;border-radius:999px;margin-bottom:18px}
+    .wrap{max-width:1250px;margin:-45px auto 40px;padding:0 22px;display:grid;grid-template-columns:1.35fr .75fr;gap:24px}.card{background:#1b1411;border:1px solid #3a281f;border-radius:24px;padding:25px;box-shadow:0 18px 45px rgba(0,0,0,.4)}
+    h2{color:#ffae62;margin-bottom:17px;font-size:26px}.menu{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:18px}.pizza{background:#241a15;border:1px solid #4a3328;border-radius:19px;overflow:hidden;cursor:pointer;transition:.2s}.pizza:hover{transform:translateY(-4px);border-color:#ff7a1a}.pizza.selected{outline:3px solid #ff7a1a}.pizza img{width:100%;height:150px;object-fit:cover}.pizza-body{padding:15px}.pizza-top{display:flex;justify-content:space-between;gap:10px;margin-bottom:8px}.pizza strong{font-size:18px}.price{color:#ffb36d;font-weight:900}.pizza small{color:#cfcfcf;line-height:1.4}.section{margin-top:27px}
+    .extras{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:12px}.extra{background:#241a15;border:1px solid #4a3328;border-radius:14px;padding:13px;cursor:pointer}.extra input{margin-right:8px}
+    label{display:block;margin:12px 0 6px;color:#e8e8e8}input,select,textarea{width:100%;padding:13px;border-radius:12px;border:1px solid #593b2c;background:#0f0b09;color:white}textarea{min-height:92px;resize:vertical}.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}.full{grid-column:1/-1}
+    button{width:100%;padding:15px;border:0;border-radius:14px;background:#ff7a1a;color:white;font-size:17px;font-weight:900;cursor:pointer}button:hover{background:#ff9340}.cart-line{display:flex;justify-content:space-between;border-bottom:1px solid #34241d;padding:11px 0;color:#eee}.total{display:flex;justify-content:space-between;font-size:25px;font-weight:900;color:#ffb36d;margin-top:18px}.empty{color:#aaa}.status{margin-top:13px;padding:12px;border-radius:12px;display:none}.ok{display:block;background:#14391f;color:#98ffb5}.bad{display:block;background:#421616;color:#ff9c9c}footer{text-align:center;color:#888;padding:25px}
+    @media(max-width:900px){.wrap{grid-template-columns:1fr}.hero h1{font-size:42px}.hero{padding:45px 24px}.form-grid{grid-template-columns:1fr}}
+  </style>
+</head>
+<body>
+  <section class="hero">
+    <div>
+      <span class="tag">🍕 Fresh pizza delivery</span>
+      <h1>PizzaThis</h1>
+      <p>Vyber si pizzu, prílohy a odošli objednávku. Objednávka príde rovno na Discord.</p>
+    </div>
+  </section>
+
+  <main class="wrap">
+    <section class="card">
       <h2>Naše pizze</h2>
       <div class="menu" id="menu"></div>
 
@@ -9,20 +38,14 @@
 
       <div class="section">
         <h2>Údaje zákazníka</h2>
-        <label>Meno</label><input id="name" placeholder="Tvoje meno" />
-        <label>Discord</label><input id="discord" placeholder="napr. marek#0001" />
-        <label>Zamestnanec</label>
-        <select id="employee">
-          <option value="PizzaThis objednávky">PizzaThis objednávky</option>
-          <option value="Zamestnanec 1">Zamestnanec 1</option>
-          <option value="Zamestnanec 2">Zamestnanec 2</option>
-          <option value="Rozvoz">Rozvoz</option>
-        </select>
-        <label>Typ objednávky</label>
-        <select id="delivery"><option>Osobný odber</option><option>Doručenie</option></select>
-        <label>Adresa / poznámka</label><textarea id="note" placeholder="Kam doručiť, poznámka, RP info..."></textarea>
-        <button onclick="submitOrder()">Odoslať objednávku</button>
-        <div id="status" class="status"></div>
+        <div class="form-grid">
+          <div><label>Meno</label><input id="customerName" placeholder="Tvoje meno"></div>
+          <div><label>Discord</label><input id="discordName" placeholder="napr. marek#0001"></div>
+          <div><label>Zamestnanec</label><select id="employee"><option>PizzaThis objednávky</option><option>Zamestnanec 1</option><option>Zamestnanec 2</option><option>Rozvoz</option></select></div>
+          <div><label>Typ objednávky</label><select id="delivery"><option>Osobný odber</option><option>Doručenie</option></select></div>
+          <div class="full"><label>Adresa / poznámka</label><textarea id="note" placeholder="Kam doručiť, poznámka, RP info..."></textarea></div>
+          <div class="full"><button onclick="submitOrder()">Odoslať objednávku</button><div id="status" class="status"></div></div>
+        </div>
       </div>
     </section>
 
@@ -30,62 +53,45 @@
       <h2>Košík</h2>
       <div id="cart"><p class="empty">Zatiaľ nič nevybraté.</p></div>
       <div class="total"><span>Spolu</span><span id="total">0.00 €</span></div>
-      <p class="note">Poznámka: Discord login je zatiaľ vizuálny. Reálne Discord prihlásenie potrebuje backend/OAuth.</p>
     </aside>
   </main>
 
   <footer>PizzaThis © 2026</footer>
 
   <script>
-    const DISCORD_WEBHOOK_URL = "https://discord.com/api/webhooks/1500263623141101569/yfXmf21frS4OadhlDNd8OkdBzGRsOxsKHbr3FtpFTXGFp72j2NFd2oN5JRMYqxzMjEeI";
-
     const pizzas = [
-      {name:"Margherita",desc:"Paradajkový základ, mozzarella, bazalka",price:6.50,img:"https://images.unsplash.com/photo-1604068549290-dea0e4a305ca?auto=format&fit=crop&w=900&q=80"},
-      {name:"Pepperoni",desc:"Mozzarella, pepperoni, paradajkový základ",price:8.00,img:"https://images.unsplash.com/photo-1628840042765-356cda07504e?auto=format&fit=crop&w=900&q=80"},
-      {name:"Hawai",desc:"Šunka, ananás, syr",price:7.50,img:"https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?auto=format&fit=crop&w=900&q=80"},
-      {name:"Diavola",desc:"Pikantná saláma, chilli, mozzarella",price:8.70,img:"https://images.unsplash.com/photo-1594007654729-407eedc4be65?auto=format&fit=crop&w=900&q=80"},
-      {name:"Quattro Formaggi",desc:"4 druhy syra, krémová chuť",price:8.50,img:"https://images.unsplash.com/photo-1571997478779-2adcbbe9ab2f?auto=format&fit=crop&w=900&q=80"},
-      {name:"PizzaThis Special",desc:"Slanina, šunka, kukurica, BBQ omáčka",price:9.20,img:"https://images.unsplash.com/photo-1548369937-47519962c11a?auto=format&fit=crop&w=900&q=80"}
+      {name:'Margherita',desc:'Paradajkový základ, mozzarella, bazalka',price:6.50,img:'https://images.unsplash.com/photo-1604068549290-dea0e4a305ca?auto=format&fit=crop&w=900&q=80'},
+      {name:'Pepperoni',desc:'Mozzarella, pepperoni, paradajkový základ',price:8.00,img:'https://images.unsplash.com/photo-1628840042765-356cda07504e?auto=format&fit=crop&w=900&q=80'},
+      {name:'Hawai',desc:'Šunka, ananás, syr',price:7.50,img:'https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?auto=format&fit=crop&w=900&q=80'},
+      {name:'Diavola',desc:'Pikantná saláma, chilli, mozzarella',price:8.70,img:'https://images.unsplash.com/photo-1594007654729-407eedc4be65?auto=format&fit=crop&w=900&q=80'},
+      {name:'Quattro Formaggi',desc:'4 druhy syra, krémová chuť',price:8.50,img:'https://images.unsplash.com/photo-1571997478779-2adcbbe9ab2f?auto=format&fit=crop&w=900&q=80'},
+      {name:'PizzaThis Special',desc:'Slanina, šunka, kukurica, BBQ omáčka',price:9.20,img:'https://images.unsplash.com/photo-1548369937-47519962c11a?auto=format&fit=crop&w=900&q=80'}
     ];
-
-    const extrasList=[
-      {name:"Extra syr",price:1.00},{name:"Slanina",price:1.20},{name:"Kukurica",price:.80},{name:"Chilli",price:.50},{name:"Cesnakový dresing",price:.90},{name:"BBQ omáčka",price:.90}
-    ];
+    const extrasList=[{name:'Extra syr',price:1.00},{name:'Slanina',price:1.20},{name:'Kukurica',price:.80},{name:'Chilli',price:.50},{name:'Cesnakový dresing',price:.90},{name:'BBQ omáčka',price:.90}];
     const selected={pizzas:[],extras:[]};
 
     function render(){
-      const menuEl = document.getElementById('menu');
-      const extrasEl = document.getElementById('extras');
-      menuEl.innerHTML = pizzas.map((p,i)=>`<div class="pizza" id="p${i}" onclick="togglePizza(${i})"><img src="${p.img}"><div class="pizza-body"><div class="pizza-top"><strong>${p.name}</strong><span class="price">${p.price.toFixed(2)} €</span></div><small>${p.desc}</small></div></div>`).join('');
-      extrasEl.innerHTML = extrasList.map((e,i)=>`<label class="extra"><input type="checkbox" onchange="toggleExtra(${i})">${e.name} — <span class="price">${e.price.toFixed(2)} €</span></label>`).join('');
+      document.getElementById('menu').innerHTML=pizzas.map((p,i)=>`<div class="pizza" id="pizza-${i}" onclick="togglePizza(${i})"><img src="${p.img}" alt="${p.name}"><div class="pizza-body"><div class="pizza-top"><strong>${p.name}</strong><span class="price">${p.price.toFixed(2)} €</span></div><small>${p.desc}</small></div></div>`).join('');
+      document.getElementById('extras').innerHTML=extrasList.map((e,i)=>`<label class="extra"><input type="checkbox" onchange="toggleExtra(${i})">${e.name} — <span class="price">${e.price.toFixed(2)} €</span></label>`).join('');
     }
-    function togglePizza(i){const p=pizzas[i];const has=selected.pizzas.find(x=>x.name===p.name);if(has){selected.pizzas=selected.pizzas.filter(x=>x.name!==p.name);document.getElementById('p'+i).classList.remove('selected')}else{selected.pizzas.push(p);document.getElementById('p'+i).classList.add('selected')}updateCart()}
-    function toggleExtra(i){const e=extrasList[i];const has=selected.extras.find(x=>x.name===e.name);selected.extras=has?selected.extras.filter(x=>x.name!==e.name):[...selected.extras,e];updateCart()}
-    function updateCart(){const all=[...selected.pizzas,...selected.extras];const sum=all.reduce((a,b)=>a+b.price,0);document.getElementById('cart').innerHTML=all.length?all.map(i=>`<div class="cart-line"><span>${i.name}</span><span>${i.price.toFixed(2)} €</span></div>`).join(''):'<p class="empty">Zatiaľ nič nevybraté.</p>';document.getElementById('total').textContent=sum.toFixed(2)+' €'}
-    async function submitOrder(){
+
+    function togglePizza(i){
+      const p=pizzas[i];
+      const exists=selected.pizzas.find(x=>x.name===p.name);
+      const card=document.getElementById(`pizza-${i}`);
+      if(exists){selected.pizzas=selected.pizzas.filter(x=>x.name!==p.name);card.classList.remove('selected')}
+      else{selected.pizzas.push(p);card.classList.add('selected')}
+      updateCart();
+    }
+    function toggleExtra(i){
+      const e=extrasList[i];
+      const exists=selected.extras.find(x=>x.name===e.name);
+      selected.extras=exists?selected.extras.filter(x=>x.name!==e.name):[...selected.extras,e];
+      updateCart();
+    }
+    function updateCart(){
       const all=[...selected.pizzas,...selected.extras];
-      const status=document.getElementById('status');
-      if(!name.value.trim()||!discord.value.trim()){status.className='status bad';status.textContent='Vyplň meno a Discord.';return}
-      if(!all.length){status.className='status bad';status.textContent='Vyber aspoň jednu položku.';return}
-      const sum=all.reduce((a,b)=>a+b.price,0).toFixed(2);
-      const text=`🍕 **NOVÁ OBJEDNÁVKA — PizzaThis**
-
-👤 **Meno:** ${name.value}
-💬 **Discord:** ${discord.value}
-👷 **Zamestnanec:** ${employee.value}
-🚗 **Typ:** ${delivery.value}
-📝 **Poznámka:** ${note.value||'žiadna'}
-
-📦 **Položky:**
-${all.map(i=>`• ${i.name} — ${i.price.toFixed(2)} €`).join('
-')}
-
-💰 **Spolu:** ${sum} €`;
-      if(DISCORD_WEBHOOK_URL==='SEM_DAJ_DISCORD_WEBHOOK_URL'){alert(text);status.className='status ok';status.textContent='Objednávka sa ukázala ako náhľad. Doplň webhook URL, aby chodila na Discord.';return}
-      try{await fetch(DISCORD_WEBHOOK_URL,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({content:text})});status.className='status ok';status.textContent='Objednávka odoslaná na Discord.'}
-      catch(e){status.className='status bad';status.textContent='Nepodarilo sa odoslať objednávku. Skontroluj webhook.'}
+      const sum=all.reduce((a,b)=>a+b.price,0);
+      document.getElementById('cart').innerHTML=all.length?all.map(i=>`<div class="cart-line"><span>${i.name}</span><span>${i.price.toFixed(2)} €</span></div>`).join(''):'<p class="empty">Zatiaľ nič nevybraté.</p>';
+      document.getElementById('total').textContent=sum.toFixed(2)+' €';
     }
-    render();
-  </script>
-</body>
-</html>
