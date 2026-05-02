@@ -1,103 +1,149 @@
-<!DOCTYPE html>
-<html lang="sk">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>PizzaThis — Italian POS</title>
-  <style>
-    :root{--bg:#070807;--panel:#11130f;--panel2:#171a14;--line:#2c3328;--green:#1fa463;--red:#d83a2e;--cream:#fff3d6;--gold:#f7c84b;--muted:#9ba391;--text:#fff8e8}
-    *{box-sizing:border-box;margin:0;padding:0;font-family:Inter,Arial,sans-serif}body{background:radial-gradient(circle at top left,#183d25 0,#080908 34%,#090606 100%);color:var(--text);min-height:100vh;overflow-x:hidden}.app{display:grid;grid-template-columns:84px 1fr 390px;min-height:100vh}.sidebar{background:rgba(8,10,8,.92);border-right:1px solid var(--line);padding:20px 12px;display:flex;flex-direction:column;gap:14px;position:sticky;top:0;height:100vh}.logo{height:58px;border-radius:18px;background:linear-gradient(135deg,var(--green),var(--cream),var(--red));display:grid;place-items:center;font-weight:1000;color:#101010;font-size:22px;box-shadow:0 0 28px #fff3d633}.nav{height:58px;border-radius:18px;background:#121410;border:1px solid #293027;display:grid;place-items:center;font-size:25px;cursor:pointer;transition:.18s}.nav:hover,.nav.active{background:#192116;border-color:var(--cream);box-shadow:0 0 20px #fff3d633;transform:translateY(-2px)}.main{padding:24px 28px}.topbar{height:66px;background:rgba(14,16,13,.84);border:1px solid var(--line);border-radius:24px;display:flex;align-items:center;justify-content:space-between;padding:0 18px;margin-bottom:24px;backdrop-filter:blur(12px)}.title{display:flex;align-items:center;gap:14px}.title h1{font-size:30px}.badge{padding:8px 13px;border-radius:999px;background:#102719;border:1px solid var(--green);color:#88ffbc;font-weight:900;font-size:13px}.time{text-align:center;font-weight:900;letter-spacing:2px}.time small{display:block;color:var(--muted);letter-spacing:1px}.search{width:280px;padding:13px 15px;border-radius:14px;border:1px solid var(--line);background:#0d0f0c;color:white}.section-head{display:flex;align-items:end;justify-content:space-between;margin:18px 0}.section-head h2{font-size:26px;color:var(--cream)}.section-head p{color:var(--muted);font-size:14px;margin-top:4px}.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(215px,1fr));gap:18px}.product{background:linear-gradient(180deg,#191d16,#10120e);border:1px solid var(--line);border-radius:22px;overflow:hidden;cursor:pointer;transiti
-  </style>
-</head>
-<body>
-  <div class="app">
-    <aside class="sidebar">
-      <div class="logo">PT</div>
-      <div class="nav active" data-cat="Pizza" onclick="setCategory('Pizza',this)">🍕</div>
-      <div class="nav" data-cat="Drink" onclick="setCategory('Drink',this)">🥤</div>
-      <div class="nav" data-cat="Dresing" onclick="setCategory('Dresing',this)">🧄</div>
-      <div class="nav" data-cat="Dezert" onclick="setCategory('Dezert',this)">🍰</div>
-      <div class="nav" data-cat="Orders" onclick="setCategory('Orders',this)">🧾</div>
-    </aside>
-
-    <main class="main">
-      <div class="topbar">
-        <div class="title"><h1 id="pageTitle">Pizzy</h1><span class="badge">● OTVORENÉ</span></div>
-        <div class="time"><span id="clock">--:--:--</span><small id="date">PizzaThis</small></div>
-        <input class="search" id="search" placeholder="Hľadať produkt..." oninput="filterProducts()">
-      </div>
-      <div class="section-head"><div><h2 id="sectionTitle">Pizza menu</h2><p id="sectionDesc">Klikni na kartu a produkt sa pridá do účtu.</p></div></div>
-      <div class="grid" id="products"></div>
-    </main>
-
-    <aside class="receipt">
-      <div class="profile"><div><strong id="employeeName">Theo Wild</strong><span>Zamestnanec</span></div><div class="avatar" id="avatar">TW</div></div>
-      <h2>ÚČET</h2><span class="order-tag">NOVÁ OBJEDNÁVKA</span>
-      <div class="cart" id="cart"><div class="empty">🛒<br>Zatiaľ tu nič není.<br>Vyber položku z menu.</div></div>
-      <div class="form">
-        <div class="row"><div><label>Meno</label><input id="customerName" placeholder="Meno zákazníka"></div><div><label>Discord</label><input id="discordName" placeholder="nick#0001"></div></div>
-        <label>Zamestnanec / zložka</label><select id="employee"><option>Theo Wild</option><option>Marek</option><option>Zamestnanec 1</option><option>Zamestnanec 2</option><option>Rozvoz</option></select>
-        <label>Typ</label><select id="delivery"><option>Osobný odber</option><option>Doručenie</option></select>
-        <label>Poznámka</label><textarea id="note" placeholder="Adresa, poznámka..."></textarea>
-        <div class="total"><span>CELKOM</span><span id="total">0 $</span></div>
-        <div class="pay-row"><button class="ghost" onclick="clearOrder()">🗑️ Vyčistiť</button><button class="ghost" onclick="fillDiscord()">💬 Discord</button></div>
-        <button onclick="submitOrder()">ZAPLATIŤ / ODOSLAŤ</button><div id="status" class="status"></div>
-        <div class="orders" id="savedOrders"></div>
-      </div>
-    </aside>
-  </div>
-
-  <script>
-    const products=[
-      {name:'Quattro Formaggi',price:550,cat:'Pizza',desc:'Mozzarella, gorgonzola, parmezán, ricotta',img:'https://images.unsplash.com/photo-1604068549290-dea0e4a305ca?auto=format&fit=crop&w=900&q=80'},
-      {name:'Hawaii',price:540,cat:'Pizza',desc:'Šunka, ananás, mozzarella',img:'https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?auto=format&fit=crop&w=900&q=80'},
-      {name:'Napoletana',price:520,cat:'Pizza',desc:'Paradajky, mozzarella, bazalka',img:'https://images.unsplash.com/photo-1574071318508-1cdbab80d002?auto=format&fit=crop&w=900&q=80'},
-      {name:'Prosciutto',price:590,cat:'Pizza',desc:'Prosciutto, rukola, parmezán',img:'https://images.unsplash.com/photo-1595854341625-f33ee10dbf94?auto=format&fit=crop&w=900&q=80'},
-      {name:'Capricciosa',price:570,cat:'Pizza',desc:'Šunka, hríby, olivy, artičoky',img:'https://images.unsplash.com/photo-1548369937-47519962c11a?auto=format&fit=crop&w=900&q=80'},
-      {name:'Diavola',price:620,cat:'Pizza',desc:'Pikantná saláma, chilli, mozzarella',img:'https://images.unsplash.com/photo-1628840042765-356cda07504e?auto=format&fit=crop&w=900&q=80'},
-      {name:'Cola',price:120,cat:'Drink',desc:'Ľadovo vychladená cola',img:'https://images.unsplash.com/photo-1622483767028-3f66f32aef97?auto=format&fit=crop&w=900&q=80'},
-      {name:'Lemon Soda',price:140,cat:'Drink',desc:'Citrónová limonáda',img:'https://images.unsplash.com/photo-1621263764928-df1444c5e859?auto=format&fit=crop&w=900&q=80'},
-      {name:'Orange Fresh',price:180,cat:'Drink',desc:'Čerstvý pomarančový fresh',img:'https://images.unsplash.com/photo-1600271886742-f049cd451bba?auto=format&fit=crop&w=900&q=80'},
-      {name:'Ice Coffee',price:220,cat:'Drink',desc:'Ľadová káva so smotanou',img:'https://images.unsplash.com/photo-1461023058943-07fcbe16d735?auto=format&fit=crop&w=900&q=80'},
-      {name:'Strawberry Shake',price:250,cat:'Drink',desc:'Jahodový milkshake',img:'https://images.unsplash.com/photo-1572490122747-3968b75cc699?auto=format&fit=crop&w=900&q=80'},
-      {name:'Blueberry Lemonade',price:210,cat:'Drink',desc:'Čučoriedková limonáda',img:'https://images.unsplash.com/photo-1513558161293-cdaf765ed2fd?auto=format&fit=crop&w=900&q=80'},
-      {name:'Cesnakový dresing',price:60,cat:'Dresing',desc:'Krémový cesnakový dip',img:'https://images.unsplash.com/photo-1472476443507-c7a5948772fc?auto=format&fit=crop&w=900&q=80'},
-      {name:'BBQ omáčka',price:70,cat:'Dresing',desc:'Sladko-dymová BBQ omáčka',img:'https://images.unsplash.com/photo-1563599175592-c58dc214deff?auto=format&fit=crop&w=900&q=80'},
-      {name:'Chilli dip',price:50,cat:'Dresing',desc:'Pikantná omáčka',img:'https://images.unsplash.com/photo-1506368249639-73a05d6f6488?auto=format&fit=crop&w=900&q=80'},
-      {name:'Syrový dip',price:80,cat:'Dresing',desc:'Jemný cheese dip',img:'https://images.unsplash.com/photo-1486297678162-eb2a19b0a32d?auto=format&fit=crop&w=900&q=80'},
-      {name:'Tiramisu',price:180,cat:'Dezert',desc:'Taliansky kávový dezert',img:'https://images.unsplash.com/photo-1571877227200-a0d98ea607e9?auto=format&fit=crop&w=900&q=80'},
-      {name:'Cannoli',price:160,cat:'Dezert',desc:'Sicílska sladká trubička',img:'https://images.unsplash.com/photo-1627308595229-7830a5c91f9f?auto=format&fit=crop&w=900&q=80'},
-      {name:'Panna Cotta',price:170,cat:'Dezert',desc:'Vanilková panna cotta',img:'https://images.unsplash.com/photo-1488477181946-6428a0291777?auto=format&fit=crop&w=900&q=80'}
-    ];
-    let cart=[];let currentCat='Pizza';
-    const titles={Pizza:'Pizzy',Drink:'Drinky',Dresing:'Dresingy',Dezert:'Dezerty',Orders:'Objednávky'};
-    function setCategory(cat,el){currentCat=cat;document.querySelectorAll('.nav').forEach(n=>n.classList.remove('active'));el.classList.add('active');document.getElementById('pageTitle').textContent=titles[cat];document.getElementById('search').value='';filterProducts()}
-    function renderProducts(list){document.getElementById('sectionTitle').textContent=currentCat==='Orders'?'Uložené objednávky':titles[currentCat];document.getElementById('sectionDesc').textContent=currentCat==='Orders'?'Objednávky sa ukladajú do tohto prehliadača cez localStorage.':'Klikni na kartu a produkt sa pridá do účtu.';document.getElementById('products').innerHTML=list.map(p=>`<div class="product" onclick="addItem('${p.name}',${p.price})"><span class="chip">${p.cat}</span><img src="${p.img}"><div class="body"><h3>${p.name}</h3><p>${p.desc}</p><div class="price">${p.price} $</div></div></div>`).join('')}
-    function filterProducts(){const q=document.getElementById('search').value.toLowerCase();if(currentCat==='Orders'){renderOrdersPage();return}renderProducts(products.filter(p=>p.cat===currentCat&&(p.name.toLowerCase().includes(q)||p.desc.toLowerCase().includes(q))))}
-    function addItem(name,price){cart.push({name,price});updateCart()}
-    function updateCart(){const c=document.getElementById('cart');const total=cart.reduce((s,i)=>s+i.price,0);c.innerHTML=cart.length?cart.map((i,idx)=>`<div class="cart-line"><span>${i.name}</span><span>${i.price} $</span></div>`).join(''):'<div class="empty">🛒<br>Zatiaľ tu nič není.<br>Vyber položku z menu.</div>';document.getElementById('total').textContent=total+' $'}
-    function fillDiscord(){const n=prompt('Discord zákazníka:');if(n)document.getElementById('discordName').value=n}
-    function clearOrder(){cart=[];updateCart()}
-    function getOrders(){return JSON.parse(localStorage.getItem('pizzaThisOrders')||'[]')}
-    function saveOrder(order){const orders=getOrders();orders.unshift(order);localStorage.setItem('pizzaThisOrders',JSON.stringify(orders.slice(0,50)));renderSavedOrders();if(currentCat==='Orders')renderOrdersPage()}
-    function renderSavedOrders(){const box=document.getElementById('savedOrders');const orders=getOrders().slice(0,5);box.innerHTML=orders.length?orders.map(o=>`<div class="order-mini"><b>${o.id}</b> • ${o.employee}<br>${o.customer} — ${o.total} $</div>`).join(''):'<div class="order-mini">🧾 Tu sa budú ukladať objednávky.</div>'}
-    function renderOrdersPage(){const orders=getOrders();document.getElementById('sectionTitle').textContent='Uložené objednávky';document.getElementById('sectionDesc').textContent='Každá odoslaná objednávka sa uloží sem aj do pravého poznámkového bloku.';document.getElementById('products').innerHTML=orders.length?orders.map(o=>`<div class="product"><div class="body"><span class="chip">${o.employee}</span><h3>${o.id}</h3><p><b>${o.customer}</b><br>${o.items.map(i=>i.name).join(', ')}</p><div class="price">${o.total} $</div></div></div>`).join(''):'<div class="product"><div class="body"><h3>Žiadne objednávky</h3><p>Zatiaľ nebola odoslaná žiadna objednávka.</p></div></div>'}
-    function tick(){const d=new Date();document.getElementById('clock').textContent=d.toLocaleTimeString('sk-SK');document.getElementById('date').textContent=d.toLocaleDateString('sk-SK')}setInterval(tick,1000);tick();
-    async function submitOrder(){const status=document.getElementById('status');const name=document.getElementById('customerName').value.trim();const dc=document.getElementById('discordName').value.trim();const employee=document.getElementById('employee').value;const delivery=document.getElementById('delivery').value;const note=document.getElementById('note').value.trim();if(!name||!dc){status.className='status bad';status.textContent='Vyplň meno a Discord zákazníka.';return}if(!cart.length){status.className='status bad';status.textContent='Vyber aspoň jednu položku.';return}const sum=cart.reduce((s,i)=>s+i.price,0);const order={id:'OBJ-'+Date.now().toString().slice(-6),customer:name,discord:dc,employee,delivery,note,total:sum,items:[...cart],created:new Date().toLocaleString('sk-SK')};saveOrder(order);const text=`🍕 **NOVÁ OBJEDNÁVKA — PizzaThis**
-
-🧾 **ID:** ${order.id}
-📁 **Zložka zamestnanca:** ${employee}
-👤 **Zákazník:** ${name}
-💬 **Discord zákazníka:** ${dc}
-🚗 **Typ:** ${delivery}
-📝 **Poznámka:** ${note||'žiadna'}
-
-📦 **Položky:**
-${cart.map(i=>`• ${i.name} — ${i.price} $`).join('
-')}
-
-💰 **Spolu:** ${sum} $`;try{const res=await fetch('/api/order',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({content:text})});if(!res.ok)throw new Error('failed');status.className='status ok';status.textContent='Objednávka odoslaná na Discord a uložená.';clearOrder()}catch(e){status.className='status bad';status.textContent='Objednávka uložená, ale Discord odoslanie zlyhalo.';clearOrder()}}
-    filterProducts();updateCart();renderSavedOrders();
-  </script>
-</body>
-</html>
+diff --git a/C:\Users\blaho\Documents\Codex\2026-05-03\files-mentioned-by-the-user-9420e349\index.html b/C:\Users\blaho\Documents\Codex\2026-05-03\files-mentioned-by-the-user-9420e349\index.html
+new file mode 100644
+--- /dev/null
++++ b/C:\Users\blaho\Documents\Codex\2026-05-03\files-mentioned-by-the-user-9420e349\index.html
+@@ -0,0 +1,144 @@
++<!doctype html>
++<html lang="sk">
++  <head>
++    <meta charset="UTF-8" />
++    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
++    <title>Pizzeria Toscana POS</title>
++    <link rel="preconnect" href="https://images.unsplash.com" />
++    <link rel="stylesheet" href="styles.css" />
++  </head>
++  <body>
++    <div class="app-shell">
++      <aside class="rail" aria-label="Navigacia">
++        <div class="brand">PT</div>
++        <button class="rail-btn active" data-panel="pizza" title="Pizze">🍕</button>
++        <button class="rail-btn" data-panel="drinks" title="Napoje">🥤</button>
++        <button class="rail-btn" data-panel="receipts" title="Objednavky">🧾</button>
++        <button class="rail-btn" data-panel="combos" title="Komba">🛵</button>
++        <button class="rail-btn" data-panel="reports" title="Vyplata">💸</button>
++        <button class="rail-btn bottom" id="logoutBtn" title="Odhlasit sa">↪</button>
++      </aside>
++
++      <main class="workspace">
++        <header class="topbar">
++          <div>
++            <h1 id="panelTitle">Pizzy</h1>
++            <p id="panelSubtitle">Talianska objednavkova pokladna</p>
++          </div>
++          <div class="status-pill"><span></span> OTVORENE</div>
++          <div class="clock">
++            <strong id="clockTime">--:--:--</strong>
++            <small id="clockDate">--</small>
++          </div>
++          <label class="search">
++            <span>⌕</span>
++            <input id="searchInput" type="search" placeholder="Hladat produkt..." />
++          </label>
++          <div class="payout">
++            <small>VYPLATA</small>
++            <strong id="payoutAmount">0 $</strong>
++          </div>
++          <button class="profile" id="loginBtn">
++            <img id="avatar" alt="" src="https://cdn.discordapp.com/embed/avatars/0.png" />
++            <span>
++              <strong id="employeeName">Neprihlaseny</strong>
++              <small id="employeeRole">Discord login</small>
++            </span>
++          </button>
++          <button class="cart-chip">
++            🛒 KOSIK <strong id="cartCount">0</strong>
++          </button>
++        </header>
++
++        <section class="content">
++          <div class="menu-area">
++            <div class="toolbar">
++              <div class="segmented" role="tablist" aria-label="Typ menu">
++                <button class="segment active" data-filter="all">Vsetko</button>
++                <button class="segment" data-filter="pizza">Pizzy</button>
++                <button class="segment" data-filter="drinks">Napoje</button>
++                <button class="segment" data-filter="combos">Komba</button>
++              </div>
++              <button class="ghost-btn" id="clearEmployeeData">Vycistit moje data</button>
++            </div>
++            <div class="cards" id="productGrid"></div>
++          </div>
++
++          <aside class="receipt">
++            <div class="receipt-head">
++              <div>
++                <h2>UCET</h2>
++                <span>NOVA OBJEDNAVKA</span>
++              </div>
++              <button id="clearCart">Vysypat</button>
++            </div>
++
++            <div class="cart-list" id="cartList">
++              <div class="empty">
++                <div>🛒</div>
++                <p>Zatial zde nic neni.</p>
++                <small>Vyberte polozku z menu.</small>
++              </div>
++            </div>
++
++            <div class="receipt-bottom">
++              <div class="field-row">
++                <label for="discountSelect">SLEVA NA JIDLO</label>
++                <select id="discountSelect">
++                  <option value="0">Bez slevy</option>
++                  <option value="10">10 %</option>
++                  <option value="20">20 %</option>
++                </select>
++              </div>
++              <div class="field-row">
++                <label for="tipInput">DYSKO (TIP)</label>
++                <input id="tipInput" type="number" min="0" step="1" value="0" />
++              </div>
++              <div class="total-row">
++                <span>CELKEM</span>
++                <strong id="cartTotal">0 $</strong>
++              </div>
++              <div class="pay-tabs">
++                <button class="active" data-pay="cash">💵 Hotove</button>
++                <button data-pay="card">💳 Kartou</button>
++              </div>
++              <button class="pay-btn" id="payBtn">ZAPLATIT</button>
++            </div>
++          </aside>
++        </section>
++      </main>
++    </div>
++
++    <dialog id="loginModal" class="modal">
++      <form method="dialog">
++        <h2>Login zamestnanca</h2>
++        <p>Prihlasenie je oddelene pre kazdeho zamestnanca. Objednavky aj vyplata sa ukladaju pod jeho Discord ID.</p>
++        <button class="discord-btn" id="discordLogin" type="button">Prihlasit cez Discord</button>
++        <div class="manual-login">
++          <label>
++            Meno zamestnanca
++            <input id="manualName" type="text" placeholder="napr. Theo Wild" />
++          </label>
++          <label>
++            Discord ID
++            <input id="manualId" type="text" placeholder="napr. theo_wild" />
++          </label>
++          <button id="manualLogin" type="button">Pouzit demo login</button>
++        </div>
++        <button class="ghost-btn" value="cancel">Zavriet</button>
++      </form>
++    </dialog>
++
++    <template id="orderTemplate">
++      <article class="order-card">
++        <div>
++          <strong></strong>
++          <small></small>
++        </div>
++        <span></span>
++      </article>
++    </template>
++
++    <script src="app.js"></script>
++  </body>
++</html>
