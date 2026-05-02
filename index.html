@@ -1,104 +1,127 @@
-+<!doctype html>
-+<html lang="sk">
-+<head>
-+  <meta charset="utf-8">
-+  <meta name="viewport" content="width=device-width, initial-scale=1">
-+  <title>Pizzeria Toscana POS</title>
-+  <style>
-+    :root{--bg:#070708;--side:#0c0c10;--panel:#121216;--panel2:#191a1f;--line:rgba(255,255,255,.08);--gold:#d7b64b;--green:#168c46;--red:#be2e2e;--text:#f4eddf;--muted:#8d889b}
-+    *{box-sizing:border-box}body{margin:0;min-height:100vh;background:linear-gradient(90deg,rgba(22,140,70,.12),transparent 24%),linear-gradient(270deg,rgba(190,46,46,.12),transparent 24%),var(--bg);color:var(--text);font-family:Inter,Arial,sans-serif}button,input,select{font:inherit}button{cursor:pointer}
-+    .app{display:grid;grid-template-columns:80px minmax(0,1fr);min-height:100vh}.rail{position:sticky;top:0;height:100vh;padding:26px 9px;display:flex;flex-direction:column;gap:12px;align-items:center;background:var(--side);border-right:1px solid var(--line)}.brand{width:64px;height:64px;border-radius:18px;display:grid;place-items:center;background:linear-gradient(135deg,#f5dd82,#9d761d);color:#130f05;font:700 22px Georgia,serif;box-shadow:0 18px 36px rgba(215,182,75,.22);margin-bottom:20px}.nav{width:64px;height:64px;border:1px solid var(--line);border-radius:18px;background:var(--panel);color:var(--text);font-weight:900}.nav.active,.nav:hover{border-color:rgba(215,182,75,.7);background:rgba(215,182,75,.14)}.logout{margin-top:auto}
-+    .top{min-height:74px;display:grid;grid-template-columns:minmax(170px,1fr) auto auto minmax(210px,360px) auto auto auto;align-items:center;gap:18px;padding:12px 28px;border-bottom:1px solid var(--line);background:rgba(8,8,11,.94)}h1,h2,p{margin:0}h1{font-size:27px}.sub{margin-top:7px;color:var(--muted);font-size:13px}.open,.paybox,.cartbtn{border:1px solid rgba(215,182,75,.4);border-radius:10px;background:rgba(215,182,75,.13);color:var(--gold);font-weight:950}.open{padding:10px 15px;letter-spacing:.06em}.open:before{content:"";display:inline-block;width:10px;height:10px;border-radius:99px;background:var(--gold);box-shadow:0 0 16px var(--gold);margin-right:9px}.clock{text-align:center;font-family:Consolas,monospace}.clock strong{display:block;font-size:18px;letter-spacing:.1em}.clock small{color:var(--muted)}.search{height:39px;display:flex;align-items:center;gap:10px;padding:0 13px;border:1px solid var(--line);border-radius:10px;background:var(--panel);color:var(--muted)}.search input{width:100%;min-width:0;border:0;outline:0;background:transparent;color:var(--text)}.paybox{text-align:center;min-width:94px;padding:8px 12px}.paybox small{display:block;font-size:11px;letter-spacing:.08em}.paybox strong{display:block;font-size:19px}.profile{display:flex;gap:10px;align-items:center;border:0;background:transparent;color:var(--text);text-align:left}.avatar{width:46px;height:46px;border-radius:14px;border:2px solid var(--gold);background:linear-gradient(135deg,#5865f2,#171923);display:grid;place-items:center;font-weight:950}.profile small{display:block;color:var(--muted);font-size:12px}.cartbtn{height:42px;padding:0 14px;background:var(--panel)}.cartbtn span{display:inline-grid;place-items:center;min-width:24px;height:24px;border-radius:99px;background:var(--gold);color:#120f06;margin-left:8px}
-+    .body{display:grid;grid-template-columns:minmax(0,1fr) 386px;min-height:calc(100vh - 74px)}.menu{padding:28px 32px}.toolbar{display:flex;justify-content:space-between;gap:14px;align-items:center;margin-bottom:22px}.tabs{display:flex;gap:6px;padding:5px;border:1px solid var(--line);border-radius:12px;background:rgba(255,255,255,.03)}.tab,.ghost{border:1px solid transparent;border-radius:8px;background:transparent;color:var(--muted);padding:9px 13px;font-weight:900}.tab.active,.tab:hover,.ghost:hover{color:var(--text);border-color:var(--line);background:var(--panel2)}.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(214px,1fr));gap:18px}.card{min-height:222px;overflow:hidden;border:1px solid var(--line);border-radius:8px;background:var(--panel);color:var(--text);text-align:left;box-shadow:0 18px 55px rgba(0,0,0,.42)}.card img{width:100%;aspect-ratio:1.44/1;display:block;object-fit:cover}.card div{padding:14px 16px 16px}.card strong{display:block;font-size:16px}.card span{display:block;margin-top:5px;color:var(--gold);font-size:20px;font-weight:950}
-+    .receipt{display:grid;grid-template-rows:auto 1fr auto;border-left:1px solid rgba(215,182,75,.15);background:rgba(7,7,10,.96)}.rhead{display:flex;justify-content:space-between;align-items:flex-start;padding:26px 24px 20px;border-bottom:1px solid var(--line)}.rhead h2{font-size:24px}.badge{display:inline-block;margin-top:4px;padding:3px 8px;border-radius:5px;background:rgba(215,182,75,.15);color:var(--gold);font-size:12px;font-weight:950;letter-spacing:.06em}.rhead button,.method button{border:1px solid var(--line);border-radius:8px;background:var(--panel);color:var(--muted);padding:9px 12px;font-weight:900}.cart{min-height:360px;padding:18px 24px;overflow:auto}.empty{height:100%;min-height:280px;display:grid;place-content:center;text-align:center;color:#565064}.empty b{font-size:34px}.lineitem,.order{display:grid;grid-template-columns:1fr auto;gap:12px;align-items:center;padding:13px 0;border-bottom:1px solid var(--line)}.lineitem small,.order small{display:block;margin-top:3px;color:var(--muted)}.qty{display:flex;align-items:center;gap:8px}.qty button{width:28px;height:28px;border:1px solid var(--line);border-radius:8px;background:var(--panel);color:var(--text)}.rbottom{padding:20px 24px 18px;border-top:1px solid rgba(215,182,75,.14)}.row,.total{display:flex;justify-content:space-between;align-items:center;gap:14px;padding:10px 0}.row label,.total span{color:var(--muted);font-size:13px;font-weight:950;letter-spacing:.1em}select,.row input{width:140px;height:34px;border:1px solid var(--line);border-radius:8px;background:#08090b;color:var(--text);padding:0 10px;text-align:right}.total{margin-top:10px;border-top:1px solid var(--line)}.total strong{color:var(--gold);font:900 27px Georgia,serif}.method{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:16px 0}.method button.active{color:var(--text);border-color:rgba(215,182,75,.46);background:rgba(215,182,75,.14)}.pay{width:100%;border:0;border-radius:10px;background:linear-gradient(135deg,var(--green),#f2efe2 52%,var(--red));color:#120f08;padding:15px 18px;font-weight:950;letter-spacing:.08em}
-+    dialog{width:min(460px,calc(100vw - 32px));border:1px solid rgba(215,182,75,.35);border-radius:12px;background:var(--panel);color:var(--text);box-shadow:0 18px 55px rgba(0,0,0,.5)}dialog::backdrop{background:rgba(0,0,0,.72)}dialog form{display:grid;gap:15px}dialog p{color:var(--muted);line-height:1.5}.loginfields{display:grid;gap:12px;padding-top:12px;border-top:1px solid var(--line)}.loginfields label{display:grid;gap:7px;color:var(--muted);font-weight:900}.loginfields input{height:40px;border:1px solid var(--line);border-radius:8px;background:#08090b;color:var(--text);padding:0 12px}.discord,.loginfields button{width:100%;border:0;border-radius:10px;background:#5865f2;color:white;padding:14px 18px;font-weight:950}.stats{display:grid;grid-template-columns:repeat(3,minmax(150px,1fr));gap:14px;margin-bottom:18px}.stat{border:1px solid var(--line);border-radius:8px;background:var(--panel);padding:18px}.stat small{color:var(--muted);font-weight:950;letter-spacing:.08em}.stat strong{display:block;margin-top:8px;color:var(--gold);font-size:28px}
-+    @media(max-width:1180px){.top{grid-template-columns:1fr auto auto}.open,.clock,.search{display:none}.body{grid-template-columns:1fr}.receipt{border-left:0;border-top:1px solid var(--line)}}@media(max-width:720px){.app{grid-template-columns:1fr}.rail{position:fixed;z-index:5;inset:auto 0 0;height:72px;flex-direction:row;justify-content:center;padding:8px}.brand,.logout{display:none}.nav{width:52px;height:52px}.top{grid-template-columns:1fr auto;padding:14px 16px}.paybox,.cartbtn{display:none}.menu{padding:18px 16px}.toolbar,.tabs{flex-wrap:wrap}.body{padding-bottom:72px}.stats{grid-template-columns:1fr}}
-+  </style>
-+</head>
-+<body>
-+  <div class="app">
-+    <aside class="rail">
-+      <div class="brand">PT</div>
-+      <button class="nav active" data-panel="pizza" title="Pizze">PIZ</button>
-+      <button class="nav" data-panel="drinks" title="Napoje">NAP</button>
-+      <button class="nav" data-panel="receipts" title="Objednavky">OBJ</button>
-+      <button class="nav" data-panel="combos" title="Komba">KOM</button>
-+      <button class="nav" data-panel="reports" title="Vyplata">PAY</button>
-+      <button class="nav logout" id="logoutBtn" title="Odhlasit">OUT</button>
-+    </aside>
-+    <main>
-+      <header class="top">
-+        <div><h1 id="title">Pizzy</h1><p class="sub" id="subtitle">Talianska objednavkova pokladna</p></div>
-+        <div class="open">OTVORENE</div>
-+        <div class="clock"><strong id="time">--:--:--</strong><small id="date">--</small></div>
-+        <label class="search"><span>HLADAT</span><input id="search" placeholder="Hladat produkt..."></label>
-+        <div class="paybox"><small>VYPLATA</small><strong id="payout">0 $</strong></div>
-+        <button class="profile" id="loginBtn"><span class="avatar" id="avatar">D</span><span><strong id="emp">Neprihlaseny</strong><small id="role">Discord login</small></span></button>
-+        <button class="cartbtn">KOSIK <span id="count">0</span></button>
-+      </header>
-+      <section class="body">
-+        <section class="menu">
-+          <div class="toolbar">
-+            <div class="tabs">
-+              <button class="tab active" data-filter="all">Vsetko</button>
-+              <button class="tab" data-filter="pizza">Pizzy</button>
-+              <button class="tab" data-filter="drinks">Napoje</button>
-+              <button class="tab" data-filter="combos">Komba</button>
-+            </div>
-+            <button class="ghost" id="clearData">Vycistit moje data</button>
-+          </div>
-+          <div class="grid" id="grid"></div>
-+        </section>
-+        <aside class="receipt">
-+          <div class="rhead"><div><h2>UCET</h2><span class="badge">NOVA OBJEDNAVKA</span></div><button id="clearCart">Vysypat</button></div>
-+          <div class="cart" id="cart"></div>
-+          <div class="rbottom">
-+            <div class="row"><label>SLEVA NA JIDLO</label><select id="discount"><option value="0">Bez slevy</option><option value="10">10 %</option><option value="20">20 %</option></select></div>
-+            <div class="row"><label>DYSKO (TIP)</label><input id="tip" type="number" min="0" value="0"></div>
-+            <div class="total"><span>CELKEM</span><strong id="total">0 $</strong></div>
-+            <div class="method"><button class="active" data-pay="cash">Hotove</button><button data-pay="card">Kartou</button></div>
-+            <button class="pay" id="pay">ZAPLATIT</button>
-+          </div>
-+        </aside>
-+      </section>
-+    </main>
-+  </div>
-+  <dialog id="modal">
-+    <form method="dialog">
-+      <h2>Login zamestnanca</h2>
-+      <p>Kazdy zamestnanec ma vlastne objednavky a vlastnu vyplatu. Bez Discord aplikacie pouzi demo login.</p>
-+      <button class="discord" id="discordLogin" type="button">Prihlasit cez Discord</button>
-+      <div class="loginfields">
-+        <label>Meno zamestnanca <input id="manualName" placeholder="napr. Theo Wild"></label>
-+        <label>Discord ID <input id="manualId" placeholder="napr. theo_wild"></label>
-+        <button id="manualLogin" type="button">Pouzit demo login</button>
-+      </div>
-+      <button class="ghost" value="cancel">Zavriet</button>
-+    </form>
-+  </dialog>
-+  <script>
-+    const CONFIG={discordClientId:"",redirectUri:location.origin+location.pathname};
-+    const products=[
-+      ["quattro","Quattro Formaggi",550,"pizza","https://images.unsplash.com/photo-1604382354936-07c5d9983bd3?auto=format&fit=crop&w=900&q=80"],
-+      ["hawaii","Hawaii",550,"pizza","https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?auto=format&fit=crop&w=900&q=80"],
-+      ["napoletana","Napoletana",550,"pizza","https://images.unsplash.com/photo-1574071318508-1cdbab80d002?auto=format&fit=crop&w=900&q=80"],
-+      ["prosciutto","Prosciutto",550,"pizza","https://images.unsplash.com/photo-1594007654729-407eedc4be65?auto=format&fit=crop&w=900&q=80"],
-+      ["capricciosa","Capricciosa",550,"pizza","https://images.unsplash.com/photo-1541745537411-b8046dc6d66c?auto=format&fit=crop&w=900&q=80"],
-+      ["cola","Cola",120,"drinks","https://images.unsplash.com/photo-1622483767028-3f66f32aef97?auto=format&fit=crop&w=900&q=80"],
-+      ["espresso","Espresso",90,"drinks","https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd?auto=format&fit=crop&w=900&q=80"],
-+      ["family","Rodinne kombo",1380,"combos","https://images.unsplash.com/photo-1513104890138-7c749659a591?auto=format&fit=crop&w=900&q=80"]
-+    ].map(([id,name,price,category,image])=>({id,name,price,category,image}));
-+    const $=s=>document.querySelector(s);let employee=read("pt_employee",null),cart=[],panel="pizza",filter="all",payMethod="cash";
-+    function read(k,f){try{return JSON.parse(localStorage.getItem(k))??f}catch{return f}}function write(k,v){localStorage.setItem(k,JSON.stringify(v))}function key(s){return employee?`pt_${employee.id}_${s}`:`pt_guest_${s}`}function money(v){return `${Math.round(v)} $`}function orders(){return read(key("orders"),[])}function saveOrders(v){write(key("orders"),v)}function payout(){return orders().reduce((s,o)=>s+o.employeeCut,0)}function subtotal(){return cart.reduce((s,i)=>s+i.price*i.qty,0)}function finalTotal(){return Math.max(0,subtotal()*(1-Number($("#discount").value)/100)+Number($("#tip").value||0))}
-+    function renderEmployee(){if(!employee){$("#emp").textContent="Neprihlaseny";$("#role").textContent="Discord login";$("#avatar").textContent="D";$("#payout").textContent="0 $";return}$("#emp").textContent=employee.name;$("#role").textContent="Zamestnanec";$("#avatar").textContent=employee.name.slice(0,1).toUpperCase();$("#payout").textContent=money(payout())}
-+    function renderProducts(){const q=$("#search").value.trim().toLowerCase();const items=products.filter(p=>{const pm=panel==="pizza"?p.category==="pizza":panel==="drinks"?p.category==="drinks":panel==="combos"?p.category==="combos":true;return pm&&(filter==="all"||p.category===filter)&&(!q||p.name.toLowerCase().includes(q))});$("#grid").innerHTML=items.map(p=>`<button class="card" data-product="${p.id}"><img src="${p.image}" alt="${p.name}"><div><strong>${p.name}</strong><span>${money(p.price)}</span></div></button>`).join("")}
-+    function renderCart(){$("#count").textContent=cart.reduce((s,i)=>s+i.qty,0);$("#total").textContent=money(finalTotal());if(!cart.length){$("#cart").innerHTML=`<div class="empty"><b>KOSIK</b><p>Zatial zde nic neni.</p><small>Vyberte polozku z menu.</small></div>`;return}$("#cart").innerHTML=cart.map(i=>`<div class="lineitem"><div><strong>${i.name}</strong><small>${i.qty} x ${money(i.price)}</small></div><div class="qty"><button data-dec="${i.id}">-</button><span>${money(i.qty*i.price)}</span><button data-inc="${i.id}">+</button></div></div>`).join("")}
-+    function renderOrders(){const os=orders(),rev=os.reduce((s,o)=>s+o.total,0),cut=os.reduce((s,o)=>s+o.employeeCut,0);$("#grid").innerHTML=`<div><div class="stats"><div class="stat"><small>OBJEDNAVKY</small><strong>${os.length}</strong></div><div class="stat"><small>TRZBA</small><strong>${money(rev)}</strong></div><div class="stat"><small>ZAMESTNANEC 50%</small><strong>${money(cut)}</strong></div></div>${os.length?os.slice().reverse().map(o=>`<article class="order"><div><strong>${o.items.map(i=>`${i.qty}x ${i.name}`).join(", ")}</strong><small>${new Date(o.createdAt).toLocaleString("sk-SK")} | ${o.paymentMethod==="cash"?"Hotove":"Kartou"}</small></div><span>${money(o.total)} / ${money(o.employeeCut)}</span></article>`).join(""):`<div class="empty"><b>OBJ</b><p>Ziadne objednavky.</p><small>Po zaplateni sa ukazu tu.</small></div>`}</div>`}
-+    function renderReports(){const os=orders();$("#grid").innerHTML=`<div><div class="stats"><div class="stat"><small>ZAMESTNANEC</small><strong>${employee?employee.name:"Host"}</strong></div><div class="stat"><small>VYPLATA</small><strong>${money(payout())}</strong></div><div class="stat"><small>PODIEL</small><strong>50%</strong></div></div><article class="order"><div><strong>Vyplata sa rata automaticky z kazdej objednavky.</strong><small>${os.length} objednavok ulozenych pre aktualneho zamestnanca.</small></div><span>${money(payout())}</span></article></div>`}
-+    function render(){const titles={pizza:["Pizzy","Klasicke talianske menu"],drinks:["Napoje","Studene aj teple napoje"],combos:["Komba","Rychle kombinacie pre rozvoz"],receipts:["Objednavky","Papierik objednavok pre zamestnanca"],reports:["Vyplata","50% zo zaplatenych objednavok"]};[$("#title").textContent,$("#subtitle").textContent]=titles[panel];document.querySelectorAll(".nav[data-panel]").forEach(b=>b.classList.toggle("active",b.dataset.panel===panel));if(panel==="receipts")renderOrders();else if(panel==="reports")renderReports();else renderProducts();renderCart();renderEmployee()}
-+    function add(id){const p=products.find(x=>x.id===id),e=cart.find(x=>x.id===id);if(!p)return;if(e)e.qty++;else cart.push({...p,qty:1});renderCart()}function qty(id,d){const i=cart.find(x=>x.id===id);if(!i)return;i.qty+=d;cart=cart.filter(x=>x.qty>0);renderCart()}function complete(){if(!employee){$("#modal").showModal();return}if(!cart.length)return;const total=finalTotal();saveOrders([...orders(),{id:crypto.randomUUID(),createdAt:new Date().toISOString(),employeeId:employee.id,employeeName:employee.name,items:cart.map(i=>({id:i.id,name:i.name,qty:i.qty,price:i.price})),subtotal:subtotal(),discountPercent:Number($("#discount").value),tip:Number($("#tip").value||0),total,employeeCut:total*.5,paymentMethod:payMethod}]);cart=[];$("#tip").value=0;$("#discount").value=0;render()}
-+    function discord(){if(!CONFIG.discordClientId){$("#manualName").value||="Theo Wild";$("#manualId").value||=`demo_${Date.now()}`;return}location.href=`https://discord.com/oauth2/authorize?${new URLSearchParams({client_id:CONFIG.discordClientId,redirect_uri:CONFIG.redirectUri,response_type:"token",scope:"identify"})}`}async function discordReturn(){const h=new URLSearchParams(location.hash.slice(1)),t=h.get("access_token");if(!t)return;const r=await fetch("https://discord.com/api/users/@me",{headers:{Authorization:`Bearer ${t}`}}),u=await r.json();employee={id:u.id,name:u.global_name||u.username};write("pt_employee",employee);history.replaceState(null,"",CONFIG.redirectUri)}
-+    document.addEventListener("click",e=>{const p=e.target.closest("[data-product]"),inc=e.target.closest("[data-inc]"),dec=e.target.closest("[data-dec]");if(p)add(p.dataset.product);if(inc)qty(inc.dataset.inc,1);if(dec)qty(dec.dataset.dec,-1)});document.querySelectorAll(".nav[data-panel]").forEach(b=>b.onclick=()=>{panel=b.dataset.panel;render()});document.querySelectorAll(".tab").forEach(b=>b.onclick=()=>{filter=b.dataset.filter;document.querySelectorAll(".tab").forEach(x=>x.classList.toggle("active",x===b));renderProducts()});document.querySelectorAll(".method button").forEach(b=>b.onclick=()=>{payMethod=b.dataset.pay;document.querySelectorAll(".method button").forEach(x=>x.classList.toggle("active",x===b))});$("#search").oninput=renderProducts;$("#discount").onchange=renderCart;$("#tip").oninput=renderCart;$("#clearCart").onclick=()=>{cart=[];renderCart()};$("#pay").onclick=complete;$("#loginBtn").onclick=()=>$("#modal").showModal();$("#discordLogin").onclick=discord;$("#manualLogin").onclick=()=>{const name=$("#manualName").value.trim()||"Zamestnanec",id=$("#manualId").value.trim()||name.toLowerCase().replace(/\s+/g,"_");employee={id,name};write("pt_employee",employee);$("#modal").close();render()};$("#logoutBtn").onclick=()=>{localStorage.removeItem("pt_employee");employee=null;renderEmployee()};$("#clearData").onclick=()=>{if(employee)localStorage.removeItem(key("orders"));render()};setInterval(()=>{const n=new Date();$("#time").textContent=n.toLocaleTimeString("sk-SK");$("#date").textContent=n.toLocaleDateString("sk-SK")},1000);discordReturn().finally(render);
-+  </script>
-+</body>
-+</html>
+  }
+  if (!cart.length) return;
+
+  const total = cartFinalTotal();
+  const order = {
+    id: crypto.randomUUID(),
+    createdAt: new Date().toISOString(),
+    employeeId: employee.id,
+    employeeName: employee.name,
+    items: cart.map((item) => ({ id: item.id, name: item.name, qty: item.qty, price: item.price })),
+    subtotal: cartSubtotal(),
+    discountPercent: Number(els.discountSelect.value),
+    tip: Number(els.tipInput.value || 0),
+    total,
+    employeeCut: total * 0.5,
+    paymentMethod,
+  };
+
+  saveOrders([...getOrders(), order]);
+  cart = [];
+  els.tipInput.value = 0;
+  els.discountSelect.value = 0;
+  renderPanel();
+}
+
+function openDiscordOAuth() {
+  if (!CONFIG.discordClientId) {
+    els.manualName.value ||= "Theo Wild";
+    els.manualId.value ||= `demo_${Date.now()}`;
+    return;
+  }
+
+  const params = new URLSearchParams({
+    client_id: CONFIG.discordClientId,
+    redirect_uri: CONFIG.redirectUri,
+    response_type: "token",
+    scope: "identify",
+    prompt: "none",
+  });
+  window.location.href = `https://discord.com/oauth2/authorize?${params}`;
+}
+
+async function handleDiscordReturn() {
+  const hash = new URLSearchParams(window.location.hash.slice(1));
+  const token = hash.get("access_token");
+  if (!token) return;
+
+  const response = await fetch("https://discord.com/api/users/@me", {
+    headers: { Authorization: `Bearer ${token}` },
+  });
+  const user = await response.json();
+  const avatar = user.avatar
+    ? `https://cdn.discordapp.com/avatars/${user.id}/${user.avatar}.png`
+    : `https://cdn.discordapp.com/embed/avatars/${Number(user.discriminator || 0) % 5}.png`;
+  setEmployee({ id: user.id, name: user.global_name || user.username, avatar });
+  history.replaceState(null, "", CONFIG.redirectUri);
+}
+
+function updateClock() {
+  const now = new Date();
+  els.clockTime.textContent = now.toLocaleTimeString("sk-SK");
+  els.clockDate.textContent = now.toLocaleDateString("sk-SK");
+}
+
+document.addEventListener("click", (event) => {
+  const productButton = event.target.closest("[data-product]");
+  if (productButton) addToCart(productButton.dataset.product);
+
+  const inc = event.target.closest("[data-inc]");
+  if (inc) changeQty(inc.dataset.inc, 1);
+
+  const dec = event.target.closest("[data-dec]");
+  if (dec) changeQty(dec.dataset.dec, -1);
+});
+
+document.querySelectorAll(".rail-btn[data-panel]").forEach((button) => {
+  button.addEventListener("click", () => {
+    activePanel = button.dataset.panel;
+    renderPanel();
+  });
+});
+
+document.querySelectorAll(".segment").forEach((button) => {
+  button.addEventListener("click", () => {
+    activeFilter = button.dataset.filter;
+    document.querySelectorAll(".segment").forEach((item) => item.classList.toggle("active", item === button));
+    renderProducts();
+  });
+});
+
+document.querySelectorAll(".pay-tabs button").forEach((button) => {
+  button.addEventListener("click", () => {
+    paymentMethod = button.dataset.pay;
+    document.querySelectorAll(".pay-tabs button").forEach((item) => item.classList.toggle("active", item === button));
+  });
+});
+
+els.searchInput.addEventListener("input", renderProducts);
+els.discountSelect.addEventListener("change", renderCart);
+els.tipInput.addEventListener("input", renderCart);
+els.clearCart.addEventListener("click", () => { cart = []; renderCart(); });
+els.payBtn.addEventListener("click", completeOrder);
+els.loginBtn.addEventListener("click", () => els.loginModal.showModal());
+els.discordLogin.addEventListener("click", openDiscordOAuth);
+els.manualLogin.addEventListener("click", () => {
+  const name = els.manualName.value.trim() || "Zamestnanec";
+  const id = els.manualId.value.trim() || name.toLowerCase().replace(/\s+/g, "_");
+  setEmployee({ id, name, avatar: "https://cdn.discordapp.com/embed/avatars/2.png" });
+  els.loginModal.close();
+});
+els.logoutBtn.addEventListener("click", () => {
+  localStorage.removeItem("pt_employee");
+  employee = null;
+  renderEmployee();
+});
+els.clearEmployeeData.addEventListener("click", () => {
+  if (!employee) return;
+  localStorage.removeItem(keyFor("orders"));
+  renderPanel();
+});
+
+setInterval(updateClock, 1000);
+updateClock();
+handleDiscordReturn().finally(() => {
+  renderEmployee();
+  renderPanel();
+});
