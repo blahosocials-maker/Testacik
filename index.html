@@ -3,47 +3,61 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>PizzaThis — Modern POS</title>
+  <title>PizzaThis — Italian POS</title>
   <style>
-    :root{--bg:#07070b;--panel:#111018;--line:#2a2638;--gold:#f7c84b;--orange:#ff7a1a;--pink:#ff4ecd;--green:#45e39f;--text:#f7f2e8;--muted:#8f879b}
-    *{box-sizing:border-box;margin:0;padding:0;font-family:Inter,Arial,sans-serif}body{background:radial-gradient(circle at top left,#351505 0,#07070b 42%,#050507 100%);color:var(--text);min-height:100vh;overflow-x:hidden}.app{display:grid;grid-template-columns:82px 1fr 390px;min-height:100vh}.sidebar{background:rgba(10,10,16,.9);border-right:1px solid var(--line);padding:20px 12px;display:flex;flex-direction:column;gap:14px;position:sticky;top:0;height:100vh}.logo{height:58px;border-radius:18px;background:linear-gradient(135deg,var(--gold),#9a711d);display:grid;place-items:center;font-weight:900;color:#1b1200;font-size:22px;box-shadow:0 0 24px #f7c84b44}.nav{height:58px;border-radius:18px;background:#12111a;border:1px solid #262334;display:grid;place-items:center;font-size:25px;cursor:pointer;transition:.2s}.nav:hover,.nav.active{background:#261c10;border-color:var(--gold);box-shadow:0 0 20px #f7c84b22;transform:translateY(-2px)}.main{padding:24px 28px}.topbar{height:62px;background:rgba(14,13,20,.82);border:1px solid var(--line);border-radius:24px;display:flex;align-items:center;justify-content:space-between;padding:0 18px;margin-bottom:24px;backdrop-filter:blur(12px)}.title{display:flex;align-items:center;gap:14px}.title h1{font-size:30px}.badge{padding:8px 13px;border-radius:999px;background:#221b09;border:1px solid #6f5520;color:var(--gold);font-weight:900;font-size:13px}.time{text-align:center;font-weight:900;letter-spacing:2px}.time small{display:block;color:var(--muted);letter-spacing:1px}.search{width:280px;padding:13px 15px;border-radius:14px;border:1px solid var(--line);background:#0d0c13;color:white}.section-head{display:flex;align-items:end;justify-content:space-between;margin:18px 0}.section-head h2{font-size:26px}.section-head p{color:var(--muted);font-size:14px;margin-top:4px}.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(215px,1fr));gap:18px}.product{background:linear-gradient(180deg,#191722,#100f16);border:1px solid var(--line);border-radius:22px;overflow:hidden;cursor:pointer;transition:.2s;position:relative}.product:hover{transform:translateY(-5px);border-color:var(--orange);box-shadow:0 18px 35px #0008}.product img{width:100%;height:145px;object-fit:cover}.product .body{padding:14px 15px 16px}.product h3{font-size:17px;margin-bottom:7px}.product p{color:var(--muted);font-size:13px;line-height:1.35;min-height:36px}.price{color:var(--gold);font-size:21px;font-weight:900;margin-top:11px}.chip{position:absolute;top:12px;left:12px;background:#0009;border:1px solid #ffffff22;padding:6px 9px;border-radius:999px;font-size:12px;font-weight:800}.receipt{background:rgba(12,11,17,.94);border-left:1px solid var(--line);padding:24px;position:sticky;top:0;height:100vh;display:flex;flex-direction:column}.profile{display:flex;align-items:center;justify-content:space-between;margin-bottom:18px}.avatar{width:50px;height:50px;border-radius:16px;background:linear-gradient(135deg,#1e90ff,#ff4ecd);display:grid;place-items:center;font-weight:900}.profile strong{display:block}.profile span{color:var(--muted);font-size:13px}.login{margin-bottom:14px;background:#5865f2;color:white;box-shadow:0 0 22px #5865f244}.login:hover{background:#6b75ff}.small{font-size:12px;color:var(--muted);line-height:1.4;margin:-6px 0 12px}.receipt h2{font-size:26px}.order-tag{display:inline-block;margin:7px 0 18px;background:#2b2109;color:var(--gold);padding:6px 9px;border-radius:7px;font-size:12px;font-weight:900}.cart{flex:1;border-top:1px solid var(--line);border-bottom:1px solid var(--line);padding:16px 0;overflow:auto}.empty{text-align:center;color:#595263;margin-top:120px}.cart-line{display:flex;justify-content:space-between;gap:12px;padding:12px 0;border-bottom:1px solid #242130}.cart-line span:last-child{color:var(--gold);font-weight:900}.form{padding-top:16px}label{display:block;color:#bfb7cd;font-size:13px;font-weight:800;margin:10px 0 6px}input,select,textarea{width:100%;padding:12px 13px;border-radius:13px;border:1px solid var(--line);background:#0b0a10;color:white}textarea{min-height:70px;resize:vertical}.row{display:grid;grid-template-columns:1fr 1fr;gap:10px}.total{display:flex;justify-content:space-between;align-items:center;margin:18px 0;font-size:28px;font-weight:900}.total span:last-child{color:var(--gold)}button{border:0;border-radius:16px;padding:15px;background:linear-gradient(135deg,var(--gold),#b98316);color:#160e00;font-weight:1000;font-size:16px;width:100%;cursor:pointer;box-shadow:0 0 22px #f7c84b22}.pay-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px}.ghost{background:#12111a;color:#8fe7ff;border:1px solid var(--line);box-shadow:none}.status{margin-top:10px;padding:11px;border-radius:12px;display:none;font-size:14px}.ok{display:block;background:#0d3322;color:#9bffc8}.bad{display:block;background:#3a1218;color:#ff9eac}@media(max-width:1050px){.app{grid-template-columns:1fr}.sidebar{display:none}.receipt{position:static;height:auto}.topbar{height:auto;gap:12px;flex-wrap:wrap}.search{width:100%}.main{padding:18px}}
+    :root{--bg:#070807;--panel:#11130f;--panel2:#171a14;--line:#2c3328;--green:#1fa463;--red:#d83a2e;--cream:#fff3d6;--gold:#f7c84b;--muted:#9ba391;--text:#fff8e8}
+    *{box-sizing:border-box;margin:0;padding:0;font-family:Inter,Arial,sans-serif}body{background:radial-gradient(circle at top left,#183d25 0,#080908 34%,#090606 100%);color:var(--text);min-height:100vh;overflow-x:hidden}.app{display:grid;grid-template-columns:84px 1fr 390px;min-height:100vh}.sidebar{background:rgba(8,10,8,.92);border-right:1px solid var(--line);padding:20px 12px;display:flex;flex-direction:column;gap:14px;position:sticky;top:0;height:100vh}.logo{height:58px;border-radius:18px;background:linear-gradient(135deg,var(--green),var(--cream),var(--red));display:grid;place-items:center;font-weight:1000;color:#101010;font-size:22px;box-shadow:0 0 28px #fff3d633}.nav{height:58px;border-radius:18px;background:#121410;border:1px solid #293027;display:grid;place-items:center;font-size:25px;cursor:pointer;transition:.18s}.nav:hover,.nav.active{background:#192116;border-color:var(--cream);box-shadow:0 0 20px #fff3d633;transform:translateY(-2px)}.main{padding:24px 28px}.topbar{height:66px;background:rgba(14,16,13,.84);border:1px solid var(--line);border-radius:24px;display:flex;align-items:center;justify-content:space-between;padding:0 18px;margin-bottom:24px;backdrop-filter:blur(12px)}.title{display:flex;align-items:center;gap:14px}.title h1{font-size:30px}.badge{padding:8px 13px;border-radius:999px;background:#102719;border:1px solid var(--green);color:#88ffbc;font-weight:900;font-size:13px}.time{text-align:center;font-weight:900;letter-spacing:2px}.time small{display:block;color:var(--muted);letter-spacing:1px}.search{width:280px;padding:13px 15px;border-radius:14px;border:1px solid var(--line);background:#0d0f0c;color:white}.section-head{display:flex;align-items:end;justify-content:space-between;margin:18px 0}.section-head h2{font-size:26px;color:var(--cream)}.section-head p{color:var(--muted);font-size:14px;margin-top:4px}.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(215px,1fr));gap:18px}.product{background:linear-gradient(180deg,#191d16,#10120e);border:1px solid var(--line);border-radius:22px;overflow:hidden;cursor:pointer;transiti
   </style>
 </head>
 <body>
   <div class="app">
     <aside class="sidebar">
-      <div class="logo">PT</div><div class="nav active" onclick="setCategory('Pizza',this)">🍕</div><div class="nav" onclick="setCategory('Drink',this)">🥤</div><div class="nav" onclick="setCategory('Dresing',this)">🧄</div><div class="nav" onclick="setCategory('Dezert',this)">🍰</div><div class="nav" onclick="setCategory('all',this)">🧾</div>
+      <div class="logo">PT</div>
+      <div class="nav active" data-cat="Pizza" onclick="setCategory('Pizza',this)">🍕</div>
+      <div class="nav" data-cat="Drink" onclick="setCategory('Drink',this)">🥤</div>
+      <div class="nav" data-cat="Dresing" onclick="setCategory('Dresing',this)">🧄</div>
+      <div class="nav" data-cat="Dezert" onclick="setCategory('Dezert',this)">🍰</div>
+      <div class="nav" data-cat="Orders" onclick="setCategory('Orders',this)">🧾</div>
     </aside>
+
     <main class="main">
-      <div class="topbar"><div class="title"><h1 id="pageTitle">Pizzy</h1><span class="badge">● OTVORENÉ</span></div><div class="time"><span id="clock">--:--:--</span><small id="date">PizzaThis</small></div><input class="search" id="search" placeholder="Hľadať produkt..." oninput="filterProducts()"></div>
-      <div class="section-head"><div><h2>Menu</h2><p>Pizze, drinky, dresingy a dezerty. Klikni na kartu a pridá sa do účtu.</p></div></div>
+      <div class="topbar">
+        <div class="title"><h1 id="pageTitle">Pizzy</h1><span class="badge">● OTVORENÉ</span></div>
+        <div class="time"><span id="clock">--:--:--</span><small id="date">PizzaThis</small></div>
+        <input class="search" id="search" placeholder="Hľadať produkt..." oninput="filterProducts()">
+      </div>
+      <div class="section-head"><div><h2 id="sectionTitle">Pizza menu</h2><p id="sectionDesc">Klikni na kartu a produkt sa pridá do účtu.</p></div></div>
       <div class="grid" id="products"></div>
     </main>
+
     <aside class="receipt">
-      <div class="profile"><div><strong id="employeeName">Neprihlásený</strong><span>Zamestnanec</span></div><div class="avatar" id="avatar">PT</div></div>
-      <button class="login" onclick="discordLoginMock()">Prihlásiť cez Discord</button>
-      <p class="small">Toto je vizuálny login. Reálny Discord OAuth login potrebuje ešte backend callback a Discord aplikáciu.</p>
+      <div class="profile"><div><strong id="employeeName">Theo Wild</strong><span>Zamestnanec</span></div><div class="avatar" id="avatar">TW</div></div>
       <h2>ÚČET</h2><span class="order-tag">NOVÁ OBJEDNÁVKA</span>
       <div class="cart" id="cart"><div class="empty">🛒<br>Zatiaľ tu nič není.<br>Vyber položku z menu.</div></div>
       <div class="form">
         <div class="row"><div><label>Meno</label><input id="customerName" placeholder="Meno zákazníka"></div><div><label>Discord</label><input id="discordName" placeholder="nick#0001"></div></div>
-        <label>Zložka / zamestnanec</label><select id="employee"><option>Neprihlásený</option><option>Theo Wild</option><option>Zamestnanec 1</option><option>Zamestnanec 2</option><option>Rozvoz</option></select>
-        <label>Typ</label><select id="delivery"><option>Osobný odber</option><option>Doručenie</option></select><label>Poznámka</label><textarea id="note" placeholder="Adresa, poznámka..."></textarea>
-        <div class="total"><span>CELKOM</span><span id="total">0 $</span></div><div class="pay-row"><button class="ghost" onclick="clearOrder()">🗑️ Vyčistiť</button><button class="ghost" onclick="fillDiscord()">💬 Zákazník DC</button></div><button onclick="submitOrder()">ZAPLATIŤ / ODOSLAŤ</button><div id="status" class="status"></div>
+        <label>Zamestnanec / zložka</label><select id="employee"><option>Theo Wild</option><option>Marek</option><option>Zamestnanec 1</option><option>Zamestnanec 2</option><option>Rozvoz</option></select>
+        <label>Typ</label><select id="delivery"><option>Osobný odber</option><option>Doručenie</option></select>
+        <label>Poznámka</label><textarea id="note" placeholder="Adresa, poznámka..."></textarea>
+        <div class="total"><span>CELKOM</span><span id="total">0 $</span></div>
+        <div class="pay-row"><button class="ghost" onclick="clearOrder()">🗑️ Vyčistiť</button><button class="ghost" onclick="fillDiscord()">💬 Discord</button></div>
+        <button onclick="submitOrder()">ZAPLATIŤ / ODOSLAŤ</button><div id="status" class="status"></div>
+        <div class="orders" id="savedOrders"></div>
       </div>
     </aside>
   </div>
+
   <script>
     const products=[
-      {name:'Quattro Formaggi',price:550,cat:'Pizza',desc:'4 druhy syra, extra krémová',img:'https://images.unsplash.com/photo-1604068549290-dea0e4a305ca?auto=format&fit=crop&w=900&q=80'},
-      {name:'Hawaii',price:550,cat:'Pizza',desc:'Šunka, ananás, syr',img:'https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?auto=format&fit=crop&w=900&q=80'},
-      {name:'Napoletana',price:550,cat:'Pizza',desc:'Paradajky, mozzarella, bazalka',img:'https://images.unsplash.com/photo-1574071318508-1cdbab80d002?auto=format&fit=crop&w=900&q=80'},
+      {name:'Quattro Formaggi',price:550,cat:'Pizza',desc:'Mozzarella, gorgonzola, parmezán, ricotta',img:'https://images.unsplash.com/photo-1604068549290-dea0e4a305ca?auto=format&fit=crop&w=900&q=80'},
+      {name:'Hawaii',price:540,cat:'Pizza',desc:'Šunka, ananás, mozzarella',img:'https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?auto=format&fit=crop&w=900&q=80'},
+      {name:'Napoletana',price:520,cat:'Pizza',desc:'Paradajky, mozzarella, bazalka',img:'https://images.unsplash.com/photo-1574071318508-1cdbab80d002?auto=format&fit=crop&w=900&q=80'},
       {name:'Prosciutto',price:590,cat:'Pizza',desc:'Prosciutto, rukola, parmezán',img:'https://images.unsplash.com/photo-1595854341625-f33ee10dbf94?auto=format&fit=crop&w=900&q=80'},
-      {name:'Capricciosa',price:570,cat:'Pizza',desc:'Šunka, hríby, olivy, syr',img:'https://images.unsplash.com/photo-1548369937-47519962c11a?auto=format&fit=crop&w=900&q=80'},
-      {name:'Diavola',price:620,cat:'Pizza',desc:'Pikantná saláma, chilli',img:'https://images.unsplash.com/photo-1628840042765-356cda07504e?auto=format&fit=crop&w=900&q=80'},
+      {name:'Capricciosa',price:570,cat:'Pizza',desc:'Šunka, hríby, olivy, artičoky',img:'https://images.unsplash.com/photo-1548369937-47519962c11a?auto=format&fit=crop&w=900&q=80'},
+      {name:'Diavola',price:620,cat:'Pizza',desc:'Pikantná saláma, chilli, mozzarella',img:'https://images.unsplash.com/photo-1628840042765-356cda07504e?auto=format&fit=crop&w=900&q=80'},
       {name:'Cola',price:120,cat:'Drink',desc:'Ľadovo vychladená cola',img:'https://images.unsplash.com/photo-1622483767028-3f66f32aef97?auto=format&fit=crop&w=900&q=80'},
       {name:'Lemon Soda',price:140,cat:'Drink',desc:'Citrónová limonáda',img:'https://images.unsplash.com/photo-1621263764928-df1444c5e859?auto=format&fit=crop&w=900&q=80'},
-      {name:'Orange Fresh',price:180,cat:'Drink',desc:'Pomarančový fresh',img:'https://images.unsplash.com/photo-1600271886742-f049cd451bba?auto=format&fit=crop&w=900&q=80'},
+      {name:'Orange Fresh',price:180,cat:'Drink',desc:'Čerstvý pomarančový fresh',img:'https://images.unsplash.com/photo-1600271886742-f049cd451bba?auto=format&fit=crop&w=900&q=80'},
       {name:'Ice Coffee',price:220,cat:'Drink',desc:'Ľadová káva so smotanou',img:'https://images.unsplash.com/photo-1461023058943-07fcbe16d735?auto=format&fit=crop&w=900&q=80'},
       {name:'Strawberry Shake',price:250,cat:'Drink',desc:'Jahodový milkshake',img:'https://images.unsplash.com/photo-1572490122747-3968b75cc699?auto=format&fit=crop&w=900&q=80'},
       {name:'Blueberry Lemonade',price:210,cat:'Drink',desc:'Čučoriedková limonáda',img:'https://images.unsplash.com/photo-1513558161293-cdaf765ed2fd?auto=format&fit=crop&w=900&q=80'},
@@ -51,20 +65,27 @@
       {name:'BBQ omáčka',price:70,cat:'Dresing',desc:'Sladko-dymová BBQ omáčka',img:'https://images.unsplash.com/photo-1563599175592-c58dc214deff?auto=format&fit=crop&w=900&q=80'},
       {name:'Chilli dip',price:50,cat:'Dresing',desc:'Pikantná omáčka',img:'https://images.unsplash.com/photo-1506368249639-73a05d6f6488?auto=format&fit=crop&w=900&q=80'},
       {name:'Syrový dip',price:80,cat:'Dresing',desc:'Jemný cheese dip',img:'https://images.unsplash.com/photo-1486297678162-eb2a19b0a32d?auto=format&fit=crop&w=900&q=80'},
-      {name:'Tiramisu',price:180,cat:'Dezert',desc:'Sladká bodka na záver',img:'https://images.unsplash.com/photo-1571877227200-a0d98ea607e9?auto=format&fit=crop&w=900&q=80'}
+      {name:'Tiramisu',price:180,cat:'Dezert',desc:'Taliansky kávový dezert',img:'https://images.unsplash.com/photo-1571877227200-a0d98ea607e9?auto=format&fit=crop&w=900&q=80'},
+      {name:'Cannoli',price:160,cat:'Dezert',desc:'Sicílska sladká trubička',img:'https://images.unsplash.com/photo-1627308595229-7830a5c91f9f?auto=format&fit=crop&w=900&q=80'},
+      {name:'Panna Cotta',price:170,cat:'Dezert',desc:'Vanilková panna cotta',img:'https://images.unsplash.com/photo-1488477181946-6428a0291777?auto=format&fit=crop&w=900&q=80'}
     ];
     let cart=[];let currentCat='Pizza';
-    function setCategory(cat,el){currentCat=cat;document.querySelectorAll('.nav').forEach(n=>n.classList.remove('active'));el.classList.add('active');document.getElementById('pageTitle').textContent=cat==='all'?'Všetko':cat+'y';filterProducts()}
-    function renderProducts(list){document.getElementById('products').innerHTML=list.map(p=>`<div class="product" onclick="addItem('${p.name}',${p.price})"><span class="chip">${p.cat}</span><img src="${p.img}"><div class="body"><h3>${p.name}</h3><p>${p.desc}</p><div class="price">${p.price} $</div></div></div>`).join('')}
-    function filterProducts(){const q=document.getElementById('search').value.toLowerCase();let list=products.filter(p=>(currentCat==='all'||p.cat===currentCat)&&(p.name.toLowerCase().includes(q)||p.cat.toLowerCase().includes(q)));renderProducts(list)}
+    const titles={Pizza:'Pizzy',Drink:'Drinky',Dresing:'Dresingy',Dezert:'Dezerty',Orders:'Objednávky'};
+    function setCategory(cat,el){currentCat=cat;document.querySelectorAll('.nav').forEach(n=>n.classList.remove('active'));el.classList.add('active');document.getElementById('pageTitle').textContent=titles[cat];document.getElementById('search').value='';filterProducts()}
+    function renderProducts(list){document.getElementById('sectionTitle').textContent=currentCat==='Orders'?'Uložené objednávky':titles[currentCat];document.getElementById('sectionDesc').textContent=currentCat==='Orders'?'Objednávky sa ukladajú do tohto prehliadača cez localStorage.':'Klikni na kartu a produkt sa pridá do účtu.';document.getElementById('products').innerHTML=list.map(p=>`<div class="product" onclick="addItem('${p.name}',${p.price})"><span class="chip">${p.cat}</span><img src="${p.img}"><div class="body"><h3>${p.name}</h3><p>${p.desc}</p><div class="price">${p.price} $</div></div></div>`).join('')}
+    function filterProducts(){const q=document.getElementById('search').value.toLowerCase();if(currentCat==='Orders'){renderOrdersPage();return}renderProducts(products.filter(p=>p.cat===currentCat&&(p.name.toLowerCase().includes(q)||p.desc.toLowerCase().includes(q))))}
     function addItem(name,price){cart.push({name,price});updateCart()}
-    function updateCart(){const c=document.getElementById('cart');const total=cart.reduce((s,i)=>s+i.price,0);c.innerHTML=cart.length?cart.map(i=>`<div class="cart-line"><span>${i.name}</span><span>${i.price} $</span></div>`).join(''):'<div class="empty">🛒<br>Zatiaľ tu nič není.<br>Vyber položku z menu.</div>';document.getElementById('total').textContent=total+' $'}
-    function discordLoginMock(){const n=prompt('Discord meno zamestnanca:');if(n){document.getElementById('employeeName').textContent=n;document.getElementById('employee').innerHTML=`<option>${n}</option><option>Theo Wild</option><option>Zamestnanec 1</option><option>Zamestnanec 2</option><option>Rozvoz</option>`;document.getElementById('avatar').textContent=n.slice(0,2).toUpperCase()}}
+    function updateCart(){const c=document.getElementById('cart');const total=cart.reduce((s,i)=>s+i.price,0);c.innerHTML=cart.length?cart.map((i,idx)=>`<div class="cart-line"><span>${i.name}</span><span>${i.price} $</span></div>`).join(''):'<div class="empty">🛒<br>Zatiaľ tu nič není.<br>Vyber položku z menu.</div>';document.getElementById('total').textContent=total+' $'}
     function fillDiscord(){const n=prompt('Discord zákazníka:');if(n)document.getElementById('discordName').value=n}
     function clearOrder(){cart=[];updateCart()}
+    function getOrders(){return JSON.parse(localStorage.getItem('pizzaThisOrders')||'[]')}
+    function saveOrder(order){const orders=getOrders();orders.unshift(order);localStorage.setItem('pizzaThisOrders',JSON.stringify(orders.slice(0,50)));renderSavedOrders();if(currentCat==='Orders')renderOrdersPage()}
+    function renderSavedOrders(){const box=document.getElementById('savedOrders');const orders=getOrders().slice(0,5);box.innerHTML=orders.length?orders.map(o=>`<div class="order-mini"><b>${o.id}</b> • ${o.employee}<br>${o.customer} — ${o.total} $</div>`).join(''):'<div class="order-mini">🧾 Tu sa budú ukladať objednávky.</div>'}
+    function renderOrdersPage(){const orders=getOrders();document.getElementById('sectionTitle').textContent='Uložené objednávky';document.getElementById('sectionDesc').textContent='Každá odoslaná objednávka sa uloží sem aj do pravého poznámkového bloku.';document.getElementById('products').innerHTML=orders.length?orders.map(o=>`<div class="product"><div class="body"><span class="chip">${o.employee}</span><h3>${o.id}</h3><p><b>${o.customer}</b><br>${o.items.map(i=>i.name).join(', ')}</p><div class="price">${o.total} $</div></div></div>`).join(''):'<div class="product"><div class="body"><h3>Žiadne objednávky</h3><p>Zatiaľ nebola odoslaná žiadna objednávka.</p></div></div>'}
     function tick(){const d=new Date();document.getElementById('clock').textContent=d.toLocaleTimeString('sk-SK');document.getElementById('date').textContent=d.toLocaleDateString('sk-SK')}setInterval(tick,1000);tick();
-    async function submitOrder(){const status=document.getElementById('status');const name=document.getElementById('customerName').value.trim();const dc=document.getElementById('discordName').value.trim();const employee=document.getElementById('employee').value;const delivery=document.getElementById('delivery').value;const note=document.getElementById('note').value.trim();if(!name||!dc){status.className='status bad';status.textContent='Vyplň meno a Discord zákazníka.';return}if(!cart.length){status.className='status bad';status.textContent='Vyber aspoň jednu položku.';return}const sum=cart.reduce((s,i)=>s+i.price,0);const text=`🍕 **NOVÁ OBJEDNÁVKA — PizzaThis**
+    async function submitOrder(){const status=document.getElementById('status');const name=document.getElementById('customerName').value.trim();const dc=document.getElementById('discordName').value.trim();const employee=document.getElementById('employee').value;const delivery=document.getElementById('delivery').value;const note=document.getElementById('note').value.trim();if(!name||!dc){status.className='status bad';status.textContent='Vyplň meno a Discord zákazníka.';return}if(!cart.length){status.className='status bad';status.textContent='Vyber aspoň jednu položku.';return}const sum=cart.reduce((s,i)=>s+i.price,0);const order={id:'OBJ-'+Date.now().toString().slice(-6),customer:name,discord:dc,employee,delivery,note,total:sum,items:[...cart],created:new Date().toLocaleString('sk-SK')};saveOrder(order);const text=`🍕 **NOVÁ OBJEDNÁVKA — PizzaThis**
 
+🧾 **ID:** ${order.id}
 📁 **Zložka zamestnanca:** ${employee}
 👤 **Zákazník:** ${name}
 💬 **Discord zákazníka:** ${dc}
@@ -75,8 +96,8 @@
 ${cart.map(i=>`• ${i.name} — ${i.price} $`).join('
 ')}
 
-💰 **Spolu:** ${sum} $`;try{const res=await fetch('/api/order',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({content:text})});if(!res.ok)throw new Error('failed');status.className='status ok';status.textContent='Objednávka odoslaná na Discord.';clearOrder()}catch(e){status.className='status bad';status.textContent='Nepodarilo sa odoslať. Skontroluj Vercel webhook.'}}
-    filterProducts();updateCart();
+💰 **Spolu:** ${sum} $`;try{const res=await fetch('/api/order',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({content:text})});if(!res.ok)throw new Error('failed');status.className='status ok';status.textContent='Objednávka odoslaná na Discord a uložená.';clearOrder()}catch(e){status.className='status bad';status.textContent='Objednávka uložená, ale Discord odoslanie zlyhalo.';clearOrder()}}
+    filterProducts();updateCart();renderSavedOrders();
   </script>
 </body>
 </html>
