@@ -3,95 +3,88 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>PizzaThis — Objednávka</title>
+  <title>PizzaThis — Modern POS</title>
   <style>
-    *{box-sizing:border-box;margin:0;padding:0;font-family:Arial,sans-serif}
-    body{background:#0f0b09;color:white;min-height:100vh}
-    .hero{min-height:360px;background:linear-gradient(90deg,rgba(10,6,4,.94),rgba(120,42,10,.68)),url('https://images.unsplash.com/photo-1513104890138-7c749659a591?auto=format&fit=crop&w=1600&q=80') center/cover;display:flex;align-items:center;padding:55px 8%}
-    .hero h1{font-size:64px;margin-bottom:12px;color:#fff}.hero p{font-size:20px;max-width:650px;color:#eee;line-height:1.5}.tag{display:inline-block;background:#ff7a1a22;border:1px solid #ff7a1a;color:#ffb36d;padding:8px 13px;border-radius:999px;margin-bottom:18px}
-    .wrap{max-width:1250px;margin:-45px auto 40px;padding:0 22px;display:grid;grid-template-columns:1.35fr .75fr;gap:24px}.card{background:#1b1411;border:1px solid #3a281f;border-radius:24px;padding:25px;box-shadow:0 18px 45px rgba(0,0,0,.4)}
-    h2{color:#ffae62;margin-bottom:17px;font-size:26px}.menu{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:18px}.pizza{background:#241a15;border:1px solid #4a3328;border-radius:19px;overflow:hidden;cursor:pointer;transition:.2s}.pizza:hover{transform:translateY(-4px);border-color:#ff7a1a}.pizza.selected{outline:3px solid #ff7a1a}.pizza img{width:100%;height:150px;object-fit:cover}.pizza-body{padding:15px}.pizza-top{display:flex;justify-content:space-between;gap:10px;margin-bottom:8px}.pizza strong{font-size:18px}.price{color:#ffb36d;font-weight:900}.pizza small{color:#cfcfcf;line-height:1.4}.section{margin-top:27px}
-    .extras{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:12px}.extra{background:#241a15;border:1px solid #4a3328;border-radius:14px;padding:13px;cursor:pointer}.extra input{margin-right:8px}
-    label{display:block;margin:12px 0 6px;color:#e8e8e8}input,select,textarea{width:100%;padding:13px;border-radius:12px;border:1px solid #593b2c;background:#0f0b09;color:white}textarea{min-height:92px;resize:vertical}.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}.full{grid-column:1/-1}
-    button{width:100%;padding:15px;border:0;border-radius:14px;background:#ff7a1a;color:white;font-size:17px;font-weight:900;cursor:pointer}button:hover{background:#ff9340}.cart-line{display:flex;justify-content:space-between;border-bottom:1px solid #34241d;padding:11px 0;color:#eee}.total{display:flex;justify-content:space-between;font-size:25px;font-weight:900;color:#ffb36d;margin-top:18px}.empty{color:#aaa}.status{margin-top:13px;padding:12px;border-radius:12px;display:none}.ok{display:block;background:#14391f;color:#98ffb5}.bad{display:block;background:#421616;color:#ff9c9c}footer{text-align:center;color:#888;padding:25px}
-    @media(max-width:900px){.wrap{grid-template-columns:1fr}.hero h1{font-size:42px}.hero{padding:45px 24px}.form-grid{grid-template-columns:1fr}}
+    :root{
+      --bg:#07070b;--panel:#111018;--panel2:#171520;--line:#2a2638;--gold:#f7c84b;--orange:#ff7a1a;--pink:#ff4ecd;--green:#45e39f;--text:#f7f2e8;--muted:#8f879b;
+    }
+    *{box-sizing:border-box;margin:0;padding:0;font-family:Inter,Arial,sans-serif}
+    body{background:radial-gradient(circle at top left,#2a1407 0,#07070b 38%,#050507 100%);color:var(--text);min-height:100vh;overflow-x:hidden}
+    .app{display:grid;grid-template-columns:82px 1fr 380px;min-height:100vh}
+    .sidebar{background:rgba(10,10,16,.86);border-right:1px solid var(--line);padding:20px 12px;display:flex;flex-direction:column;gap:14px;position:sticky;top:0;height:100vh}
+    .logo{height:58px;border-radius:18px;background:linear-gradient(135deg,var(--gold),#9a711d);display:grid;place-items:center;font-weight:900;color:#1b1200;font-size:22px;box-shadow:0 0 24px #f7c84b44}
+    .nav{height:58px;border-radius:18px;background:#12111a;border:1px solid #262334;display:grid;place-items:center;font-size:25px;cursor:pointer;transition:.2s}
+    .nav:hover,.nav.active{background:#261c10;border-color:var(--gold);box-shadow:0 0 20px #f7c84b22;transform:translateY(-2px)}
+    .main{padding:24px 28px}.topbar{height:62px;background:rgba(14,13,20,.8);border:1px solid var(--line);border-radius:24px;display:flex;align-items:center;justify-content:space-between;padding:0 18px;margin-bottom:24px;backdrop-filter:blur(12px)}
+    .title{display:flex;align-items:center;gap:14px}.title h1{font-size:30px}.badge{padding:8px 13px;border-radius:999px;background:#221b09;border:1px solid #6f5520;color:var(--gold);font-weight:900;font-size:13px}.time{text-align:center;font-weight:900;letter-spacing:2px}.time small{display:block;color:var(--muted);letter-spacing:1px}.search{width:280px;padding:13px 15px;border-radius:14px;border:1px solid var(--line);background:#0d0c13;color:white}
+    .section-head{display:flex;align-items:end;justify-content:space-between;margin:18px 0}.section-head h2{font-size:26px}.section-head p{color:var(--muted);font-size:14px;margin-top:4px}.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(215px,1fr));gap:18px}
+    .product{background:linear-gradient(180deg,#191722,#100f16);border:1px solid var(--line);border-radius:22px;overflow:hidden;cursor:pointer;transition:.2s;position:relative}.product:hover{transform:translateY(-5px);border-color:var(--orange);box-shadow:0 18px 35px #0008}.product.selected{outline:3px solid var(--gold);box-shadow:0 0 28px #f7c84b33}.product img{width:100%;height:145px;object-fit:cover}.product .body{padding:14px 15px 16px}.product h3{font-size:17px;margin-bottom:7px}.product p{color:var(--muted);font-size:13px;line-height:1.35;min-height:36px}.price{color:var(--gold);font-size:21px;font-weight:900;margin-top:11px}.chip{position:absolute;top:12px;left:12px;background:#0009;border:1px solid #ffffff22;padding:6px 9px;border-radius:999px;font-size:12px;font-weight:800}
+    .extras{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px}.extra{background:#14131d;border:1px solid var(--line);border-radius:18px;padding:14px;display:flex;align-items:center;gap:10px;cursor:pointer}.extra input{accent-color:var(--gold)}
+    .receipt{background:rgba(12,11,17,.94);border-left:1px solid var(--line);padding:24px;position:sticky;top:0;height:100vh;display:flex;flex-direction:column}.profile{display:flex;align-items:center;justify-content:space-between;margin-bottom:22px}.avatar{width:50px;height:50px;border-radius:16px;background:linear-gradient(135deg,#1e90ff,#ff4ecd);display:grid;place-items:center;font-weight:900}.profile strong{display:block}.profile span{color:var(--muted);font-size:13px}.receipt h2{font-size:26px}.order-tag{display:inline-block;margin:7px 0 18px;background:#2b2109;color:var(--gold);padding:6px 9px;border-radius:7px;font-size:12px;font-weight:900}.cart{flex:1;border-top:1px solid var(--line);border-bottom:1px solid var(--line);padding:16px 0;overflow:auto}.empty{text-align:center;color:#595263;margin-top:120px}.cart-line{display:flex;justify-content:space-between;gap:12px;padding:12px 0;border-bottom:1px solid #242130}.cart-line span:last-child{color:var(--gold);font-weight:900}.form{padding-top:16px}label{display:block;color:#bfb7cd;font-size:13px;font-weight:800;margin:10px 0 6px}input,select,textarea{width:100%;padding:12px 13px;border-radius:13px;border:1px solid var(--line);background:#0b0a10;color:white}textarea{min-height:70px;resize:vertical}.row{display:grid;grid-template-columns:1fr 1fr;gap:10px}.total{display:flex;justify-content:space-between;align-items:center;margin:18px 0;font-size:28px;font-weight:900}.total span:last-child{color:var(--gold)}button{border:0;border-radius:16px;padding:15px;background:linear-gradient(135deg,var(--gold),#b98316);color:#160e00;font-weight:1000;font-size:16px;width:100%;cursor:pointer;box-shadow:0 0 22px #f7c84b22}.pay-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px}.ghost{background:#12111a;color:#8fe7ff;border:1px solid var(--line);box-shadow:none}.status{margin-top:10px;padding:11px;border-radius:12px;display:none;font-size:14px}.ok{display:block;background:#0d3322;color:#9bffc8}.bad{display:block;background:#3a1218;color:#ff9eac}
+    @media(max-width:1050px){.app{grid-template-columns:1fr}.sidebar{display:none}.receipt{position:static;height:auto}.topbar{height:auto;gap:12px;flex-wrap:wrap}.search{width:100%}.main{padding:18px}}
   </style>
 </head>
 <body>
-  <section class="hero">
-    <div>
-      <span class="tag">🍕 Fresh pizza delivery</span>
-      <h1>PizzaThis</h1>
-      <p>Vyber si pizzu, prílohy a odošli objednávku. Objednávka príde rovno na Discord.</p>
-    </div>
-  </section>
-
-  <main class="wrap">
-    <section class="card">
-      <h2>Naše pizze</h2>
-      <div class="menu" id="menu"></div>
-
-      <div class="section">
-        <h2>Extra prílohy</h2>
-        <div class="extras" id="extras"></div>
-      </div>
-
-      <div class="section">
-        <h2>Údaje zákazníka</h2>
-        <div class="form-grid">
-          <div><label>Meno</label><input id="customerName" placeholder="Tvoje meno"></div>
-          <div><label>Discord</label><input id="discordName" placeholder="napr. marek#0001"></div>
-          <div><label>Zamestnanec</label><select id="employee"><option>PizzaThis objednávky</option><option>Zamestnanec 1</option><option>Zamestnanec 2</option><option>Rozvoz</option></select></div>
-          <div><label>Typ objednávky</label><select id="delivery"><option>Osobný odber</option><option>Doručenie</option></select></div>
-          <div class="full"><label>Adresa / poznámka</label><textarea id="note" placeholder="Kam doručiť, poznámka, RP info..."></textarea></div>
-          <div class="full"><button onclick="submitOrder()">Odoslať objednávku</button><div id="status" class="status"></div></div>
-        </div>
-      </div>
-    </section>
-
-    <aside class="card">
-      <h2>Košík</h2>
-      <div id="cart"><p class="empty">Zatiaľ nič nevybraté.</p></div>
-      <div class="total"><span>Spolu</span><span id="total">0.00 €</span></div>
+  <div class="app">
+    <aside class="sidebar">
+      <div class="logo">PT</div><div class="nav active">🍕</div><div class="nav">🥤</div><div class="nav">🧾</div><div class="nav">🛵</div><div class="nav">💸</div>
     </aside>
-  </main>
 
-  <footer>PizzaThis © 2026</footer>
+    <main class="main">
+      <div class="topbar">
+        <div class="title"><h1>Pizzy</h1><span class="badge">● OTVORENÉ</span></div>
+        <div class="time"><span id="clock">--:--:--</span><small id="date">PizzaThis</small></div>
+        <input class="search" id="search" placeholder="Hľadať produkt..." oninput="filterProducts()">
+      </div>
+
+      <div class="section-head"><div><h2>Pizza menu</h2><p>Klikni na kartu a pridá sa do účtu.</p></div></div>
+      <div class="grid" id="products"></div>
+
+      <div class="section-head"><div><h2>Extra prílohy</h2><p>Doplnky k objednávke.</p></div></div>
+      <div class="extras" id="extras"></div>
+    </main>
+
+    <aside class="receipt">
+      <div class="profile"><div><strong>Theo Wild</strong><span>Zamestnanec</span></div><div class="avatar">PT</div></div>
+      <h2>ÚČET</h2><span class="order-tag">NOVÁ OBJEDNÁVKA</span>
+      <div class="cart" id="cart"><div class="empty">🛒<br>Zatiaľ tu nič není.<br>Vyber položku z menu.</div></div>
+      <div class="form">
+        <div class="row"><div><label>Meno</label><input id="customerName" placeholder="Meno zákazníka"></div><div><label>Discord</label><input id="discordName" placeholder="nick#0001"></div></div>
+        <label>Zamestnanec</label><select id="employee"><option>Theo Wild</option><option>Zamestnanec 1</option><option>Zamestnanec 2</option><option>Rozvoz</option></select>
+        <label>Typ</label><select id="delivery"><option>Osobný odber</option><option>Doručenie</option></select>
+        <label>Poznámka</label><textarea id="note" placeholder="Adresa, poznámka..."></textarea>
+        <div class="total"><span>CELKOM</span><span id="total">0 $</span></div>
+        <div class="pay-row"><button class="ghost" onclick="clearOrder()">🗑️ Vyčistiť</button><button class="ghost" onclick="fillDiscord()">💬 Discord</button></div>
+        <button onclick="submitOrder()">ZAPLATIŤ / ODOSLAŤ</button><div id="status" class="status"></div>
+      </div>
+    </aside>
+  </div>
 
   <script>
-    const pizzas = [
-      {name:'Margherita',desc:'Paradajkový základ, mozzarella, bazalka',price:6.50,img:'https://images.unsplash.com/photo-1604068549290-dea0e4a305ca?auto=format&fit=crop&w=900&q=80'},
-      {name:'Pepperoni',desc:'Mozzarella, pepperoni, paradajkový základ',price:8.00,img:'https://images.unsplash.com/photo-1628840042765-356cda07504e?auto=format&fit=crop&w=900&q=80'},
-      {name:'Hawai',desc:'Šunka, ananás, syr',price:7.50,img:'https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?auto=format&fit=crop&w=900&q=80'},
-      {name:'Diavola',desc:'Pikantná saláma, chilli, mozzarella',price:8.70,img:'https://images.unsplash.com/photo-1594007654729-407eedc4be65?auto=format&fit=crop&w=900&q=80'},
-      {name:'Quattro Formaggi',desc:'4 druhy syra, krémová chuť',price:8.50,img:'https://images.unsplash.com/photo-1571997478779-2adcbbe9ab2f?auto=format&fit=crop&w=900&q=80'},
-      {name:'PizzaThis Special',desc:'Slanina, šunka, kukurica, BBQ omáčka',price:9.20,img:'https://images.unsplash.com/photo-1548369937-47519962c11a?auto=format&fit=crop&w=900&q=80'}
+    const products=[
+      {name:'Quattro Formaggi',price:550,cat:'Pizza',desc:'4 druhy syra, extra krémová',img:'https://images.unsplash.com/photo-1604068549290-dea0e4a305ca?auto=format&fit=crop&w=900&q=80'},
+      {name:'Hawaii',price:550,cat:'Pizza',desc:'Šunka, ananás, syr',img:'https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?auto=format&fit=crop&w=900&q=80'},
+      {name:'Napoletana',price:550,cat:'Pizza',desc:'Paradajky, mozzarella, bazalka',img:'https://images.unsplash.com/photo-1574071318508-1cdbab80d002?auto=format&fit=crop&w=900&q=80'},
+      {name:'Prosciutto',price:550,cat:'Pizza',desc:'Prosciutto, rukola, parmezán',img:'https://images.unsplash.com/photo-1595854341625-f33ee10dbf94?auto=format&fit=crop&w=900&q=80'},
+      {name:'Capricciosa',price:550,cat:'Pizza',desc:'Šunka, hríby, olivy, syr',img:'https://images.unsplash.com/photo-1548369937-47519962c11a?auto=format&fit=crop&w=900&q=80'},
+      {name:'Diavola',price:600,cat:'Pizza',desc:'Pikantná saláma, chilli',img:'https://images.unsplash.com/photo-1628840042765-356cda07504e?auto=format&fit=crop&w=900&q=80'},
+      {name:'Cola',price:120,cat:'Drink',desc:'Studený nápoj',img:'https://images.unsplash.com/photo-1622483767028-3f66f32aef97?auto=format&fit=crop&w=900&q=80'},
+      {name:'Tiramisu',price:180,cat:'Dezert',desc:'Sladká bodka na záver',img:'https://images.unsplash.com/photo-1571877227200-a0d98ea607e9?auto=format&fit=crop&w=900&q=80'}
     ];
-    const extrasList=[{name:'Extra syr',price:1.00},{name:'Slanina',price:1.20},{name:'Kukurica',price:.80},{name:'Chilli',price:.50},{name:'Cesnakový dresing',price:.90},{name:'BBQ omáčka',price:.90}];
-    const selected={pizzas:[],extras:[]};
+    const extras=[{name:'Extra syr',price:80},{name:'Slanina',price:90},{name:'Chilli',price:40},{name:'Cesnakový dip',price:60},{name:'BBQ omáčka',price:60},{name:'Kukurica',price:50}];
+    let cart=[];
 
-    function render(){
-      document.getElementById('menu').innerHTML=pizzas.map((p,i)=>`<div class="pizza" id="pizza-${i}" onclick="togglePizza(${i})"><img src="${p.img}" alt="${p.name}"><div class="pizza-body"><div class="pizza-top"><strong>${p.name}</strong><span class="price">${p.price.toFixed(2)} €</span></div><small>${p.desc}</small></div></div>`).join('');
-      document.getElementById('extras').innerHTML=extrasList.map((e,i)=>`<label class="extra"><input type="checkbox" onchange="toggleExtra(${i})">${e.name} — <span class="price">${e.price.toFixed(2)} €</span></label>`).join('');
-    }
-
-    function togglePizza(i){
-      const p=pizzas[i];
-      const exists=selected.pizzas.find(x=>x.name===p.name);
-      const card=document.getElementById(`pizza-${i}`);
-      if(exists){selected.pizzas=selected.pizzas.filter(x=>x.name!==p.name);card.classList.remove('selected')}
-      else{selected.pizzas.push(p);card.classList.add('selected')}
-      updateCart();
-    }
-    function toggleExtra(i){
-      const e=extrasList[i];
-      const exists=selected.extras.find(x=>x.name===e.name);
-      selected.extras=exists?selected.extras.filter(x=>x.name!==e.name):[...selected.extras,e];
-      updateCart();
-    }
-    function updateCart(){
-      const all=[...selected.pizzas,...selected.extras];
-      const sum=all.reduce((a,b)=>a+b.price,0);
-      document.getElementById('cart').innerHTML=all.length?all.map(i=>`<div class="cart-line"><span>${i.name}</span><span>${i.price.toFixed(2)} €</span></div>`).join(''):'<p class="empty">Zatiaľ nič nevybraté.</p>';
-      document.getElementById('total').textContent=sum.toFixed(2)+' €';
-    }
+    function renderProducts(list=products){document.getElementById('products').innerHTML=list.map((p,i)=>`<div class="product" onclick="addItem('${p.name}',${p.price})"><span class="chip">${p.cat}</span><img src="${p.img}"><div class="body"><h3>${p.name}</h3><p>${p.desc}</p><div class="price">${p.price} $</div></div></div>`).join('')}
+    function renderExtras(){document.getElementById('extras').innerHTML=extras.map(e=>`<label class="extra"><input type="checkbox" onchange="toggleExtra(this,'${e.name}',${e.price})"><span>${e.name}</span><b class="price">${e.price} $</b></label>`).join('')}
+    function addItem(name,price){cart.push({name,price});updateCart()}
+    function toggleExtra(input,name,price){if(input.checked)cart.push({name,price});else cart=cart.filter(i=>i.name!==name);updateCart()}
+    function updateCart(){const c=document.getElementById('cart');const total=cart.reduce((s,i)=>s+i.price,0);c.innerHTML=cart.length?cart.map((i,idx)=>`<div class="cart-line"><span>${i.name}</span><span>${i.price} $</span></div>`).join(''):'<div class="empty">🛒<br>Zatiaľ tu nič není.<br>Vyber položku z menu.</div>';document.getElementById('total').textContent=total+' $'}
+    function filterProducts(){const q=document.getElementById('search').value.toLowerCase();renderProducts(products.filter(p=>p.name.toLowerCase().includes(q)||p.cat.toLowerCase().includes(q)))}
+    function fillDiscord(){const n=prompt('Zadaj Discord nick:');if(n)document.getElementById('discordName').value=n}
+    function clearOrder(){cart=[];document.querySelectorAll('.extra input').forEach(i=>i.checked=false);updateCart()}
+    function tick(){const d=new Date();document.getElementById('clock').textContent=d.toLocaleTimeString('sk-SK');document.getElementById('date').textContent=d.toLocaleDateString('sk-SK')}setInterval(tick,1000);tick();
+    async function submitOrder(){const status=document.getElementById('status');const name=document.getElementById('customerName').value.trim();const dc=document.getElementById('discordName').value.trim();const employee=document.getElementById('employee').value;const delivery=document.getElementById('delivery').value;const note=document.getElementById('note').value.trim();if(!name||!dc){status.className='status bad';status.textContent='Vyplň meno a Discord.';return}if(!cart.length){status.className='status bad';status.textContent='Vyber aspoň jednu položku.';return}const sum=cart.reduce((s,i)=>s+i.price,0);const text=`🍕 **NOVÁ OBJEDNÁVKA — PizzaThis**\n\n👤 **Meno:** ${name}\n💬 **Discord:** ${dc}\n👷 **Zamestnanec:** ${employee}\n🚗 **Typ:** ${delivery}\n📝 **Poznámka:** ${note||'žiadna'}\n\n📦 **Položky:**\n${cart.map(i=>`• ${i.name} — ${i.price} $`).join('\n')}\n\n💰 **Spolu:** ${sum} $`;try{const res=await fetch('/api/order',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({content:text})});if(!res.ok)throw new Error('failed');status.className='status ok';status.textContent='Objednávka odoslaná na Discord.';clearOrder()}catch(e){status.className='status bad';status.textContent='Nepodarilo sa odoslať. Skontroluj Vercel webhook.'}}
+    renderProducts();renderExtras();updateCart();
+  </script>
+</body>
+</html>
