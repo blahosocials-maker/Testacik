@@ -1,25 +1,4 @@
 <!DOCTYPE html>
-<html lang="sk">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>PizzaThis — Online objednávka</title>
-  <style>
-    *{box-sizing:border-box;margin:0;padding:0;font-family:Inter,Arial,sans-serif}body{background:#0e0b09;color:white;min-height:100vh}.hero{min-height:430px;background:linear-gradient(90deg,rgba(10,6,4,.92),rgba(95,28,9,.72)),url('https://images.unsplash.com/photo-1513104890138-7c749659a591?auto=format&fit=crop&w=1600&q=80') center/cover;display:flex;align-items:center;padding:55px 8%}.hero-box{max-width:700px}.tag{display:inline-block;background:#ff7a1a22;border:1px solid #ff7a1a;color:#ffb36d;padding:8px 12px;border-radius:999px;margin-bottom:18px}.hero h1{font-size:64px;line-height:1;margin-bottom:18px}.hero p{font-size:20px;color:#eee;line-height:1.5}.hero button{margin-top:24px;width:auto;padding:15px 22px}.wrap{max-width:1250px;margin:-50px auto 40px;padding:0 22px;display:grid;grid-template-columns:1.35fr .75fr;gap:24px}.card{background:#1a1411;border:1px solid #33231c;border-radius:22px;padding:24px;box-shadow:0 18px 45px rgba(0,0,0,.35)}h2{color:#ffb36d;margin-bottom:16px}.menu{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:18px}.pizza{overflow:hidden;background:#241a15;border:1px solid #422d22;border-radius:20px;cursor:pointer;transition:.2s}.pizza:hover{transform:translateY(-4px);border-color:#ff7a1a}.pizza img{width:100%;height:150px;object-fit:cover}.pizza-body{padding:15px}.pizza-top{display:flex;justify-content:space-between;gap:10px;margin-bottom:8px}.pizza strong{font-size:18px}.price{color:#ffb36d;font-weight:800}.pizza small{color:#bbb;line-height:1.4}.selected{outline:2px solid #ff7a1a}.section{margin-top:26px}.extras{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:12px}.extra{background:#241a15;border:1px solid #422d22;border-radius:14px;padding:13px;cursor:pointer}.extra input{margin-right:8px}label{display:block;color:#ddd;margin:12px 0 6px}input,select,textarea{width:100%;padding:13px;border-radius:12px;border:1px solid #4a3429;background:#0f0b09;color:white}textarea{min-height:92px;resize:vertical}button{width:100%;padding:15px;border:0;border-radius:14px;background:#ff7a1a;color:white;font-weight:800;font-size:16px;cursor:pointer}button:hover{background:#ff9340}.discord-login{background:#5865f2;margin-bottom:14px}.cart-line{display:flex;justify-content:space-between;border-bottom:1px solid #34241d;padding:11px 0;color:#eee}.total{display:flex;justify-content:space-between;font-size:25px;font-weight:900;color:#ffb36d;margin-top:18px}.empty{color:#aaa}.note{font-size:13px;color:#aaa;line-height:1.45;margin-top:12px}.status{margin-top:12px;padding:12px;border-radius:12px;display:none}.ok{display:block;background:#12351f;color:#95ffb5}.bad{display:block;background:#3a1515;color:#ff9a9a}footer{text-align:center;color:#888;padding:25px}@media(max-width:900px){.wrap{grid-template-columns:1fr}.hero h1{font-size:42px}.hero{padding:45px 24px}}
-  </style>
-</head>
-<body>
-  <section class="hero">
-    <div class="hero-box">
-      <span class="tag">🍕 Los Santos fresh pizza</span>
-      <h1>PizzaThis</h1>
-      <p>Objednaj si pizzu online. Vyber menu, extra prílohy, zadaj kontakt a objednávka príde rovno zamestnancovi na Discord.</p>
-      <button onclick="document.getElementById('order').scrollIntoView({behavior:'smooth'})">Objednať teraz</button>
-    </div>
-  </section>
-
-  <main class="wrap" id="order">
-    <section class="card">
       <h2>Naše pizze</h2>
       <div class="menu" id="menu"></div>
 
@@ -30,7 +9,6 @@
 
       <div class="section">
         <h2>Údaje zákazníka</h2>
-        <button class="discord-login" onclick="fakeDiscordLogin()">Prihlásiť cez Discord</button>
         <label>Meno</label><input id="name" placeholder="Tvoje meno" />
         <label>Discord</label><input id="discord" placeholder="napr. marek#0001" />
         <label>Zamestnanec</label>
@@ -76,13 +54,14 @@
     const selected={pizzas:[],extras:[]};
 
     function render(){
-      menu.innerHTML=pizzas.map((p,i)=>`<div class="pizza" id="p${i}" onclick="togglePizza(${i})"><img src="${p.img}"><div class="pizza-body"><div class="pizza-top"><strong>${p.name}</strong><span class="price">${p.price.toFixed(2)} €</span></div><small>${p.desc}</small></div></div>`).join('');
-      extras.innerHTML=extrasList.map((e,i)=>`<label class="extra"><input type="checkbox" onchange="toggleExtra(${i})">${e.name} — <span class="price">${e.price.toFixed(2)} €</span></label>`).join('');
+      const menuEl = document.getElementById('menu');
+      const extrasEl = document.getElementById('extras');
+      menuEl.innerHTML = pizzas.map((p,i)=>`<div class="pizza" id="p${i}" onclick="togglePizza(${i})"><img src="${p.img}"><div class="pizza-body"><div class="pizza-top"><strong>${p.name}</strong><span class="price">${p.price.toFixed(2)} €</span></div><small>${p.desc}</small></div></div>`).join('');
+      extrasEl.innerHTML = extrasList.map((e,i)=>`<label class="extra"><input type="checkbox" onchange="toggleExtra(${i})">${e.name} — <span class="price">${e.price.toFixed(2)} €</span></label>`).join('');
     }
     function togglePizza(i){const p=pizzas[i];const has=selected.pizzas.find(x=>x.name===p.name);if(has){selected.pizzas=selected.pizzas.filter(x=>x.name!==p.name);document.getElementById('p'+i).classList.remove('selected')}else{selected.pizzas.push(p);document.getElementById('p'+i).classList.add('selected')}updateCart()}
     function toggleExtra(i){const e=extrasList[i];const has=selected.extras.find(x=>x.name===e.name);selected.extras=has?selected.extras.filter(x=>x.name!==e.name):[...selected.extras,e];updateCart()}
-    function updateCart(){const all=[...selected.pizzas,...selected.extras];const sum=all.reduce((a,b)=>a+b.price,0);cart.innerHTML=all.length?all.map(i=>`<div class="cart-line"><span>${i.name}</span><span>${i.price.toFixed(2)} €</span></div>`).join(''):'<p class="empty">Zatiaľ nič nevybraté.</p>';total.textContent=sum.toFixed(2)+' €'}
-    function fakeDiscordLogin(){discord.value=prompt('Napíš svoj Discord nick:')||discord.value}
+    function updateCart(){const all=[...selected.pizzas,...selected.extras];const sum=all.reduce((a,b)=>a+b.price,0);document.getElementById('cart').innerHTML=all.length?all.map(i=>`<div class="cart-line"><span>${i.name}</span><span>${i.price.toFixed(2)} €</span></div>`).join(''):'<p class="empty">Zatiaľ nič nevybraté.</p>';document.getElementById('total').textContent=sum.toFixed(2)+' €'}
     async function submitOrder(){
       const all=[...selected.pizzas,...selected.extras];
       const status=document.getElementById('status');
